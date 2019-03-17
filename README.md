@@ -1,11 +1,12 @@
-# Gatsby Starter: Typescript + SASS
-Starter with the essentials needed for a [Gatsby](https://www.gatsbyjs.org/) site. This setup includes:
-
-- Typescript
-- Typescript linting
-- SASS support
-
-Install this starter by running this from your [Gatsby CLI](https://next.gatsbyjs.org/tutorial/part-zero/#install-the-gatsby-cli):
-```
-gatsby new gatsby-site https://github.com/tdharmon/gatsby-starter-typescript-sass
+<p align="center">
+  <a href="https://www.gatsbyjs.org">
+    <img alt="bear-logo" src="./src/assets/bear-logo.png" width="60" />
+  </a>
+</p>
+<h1 align="center">
+  Hungry Bear Studio 
+</h1>
+<h4 align="center">
+  Competence matching site. Select your skillsets and match them to the right company. Current version has one industry (IT) and is connected to a sanity.io CMS backend.
+</h4>
 ```
