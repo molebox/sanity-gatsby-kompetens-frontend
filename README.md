@@ -9,4 +9,4 @@
 <h4 align="center">
   Competence matching site. Select your skillsets and match them to the right company. Current version has one industry (IT) and is connected to a sanity.io CMS backend.
 </h4>
-```
+
