@@ -1,18 +1,15 @@
 import * as React from 'react';
 import Select, { components } from 'react-select';
 import { graphql, useStaticQuery } from 'gatsby';
-import * as styles from './Roles.module.scss';
-
-interface RoleOptions {
-    value: string;
-    label: string;
-}
+import { Options } from './../commonTypes';
+import { ValueType } from 'react-select/lib/types';
 
 const roleQuery = graphql`
 {
   allSanityRole {
     edges {
       node {
+        id
         role
       }
     }
@@ -35,13 +32,20 @@ const ControlComponent  = (props: any) => (
     </div>
   );
 
-export default () => {
+interface Props {
+  getSelectedRoles: (selectedRoles: ValueType<Options[]>) => void;
+}
+
+export default ({getSelectedRoles}: Props) => {
 
     const allRoles: any = useStaticQuery(roleQuery);
-    const roles: RoleOptions[] = allRoles.allSanityRole.edges.map(({node}: any) => ({label: node.role, value: node.role}));
+    const roles: Options[] = allRoles.allSanityRole.edges.map(({node}: any) => ({label: node.role, value: node.role, id: node.id}));
+
+    const _handleRoles = (selections: ValueType<Options[]>) => getSelectedRoles(selections);
 
     return (
         <Select
+          onChange={_handleRoles}
           options={roles}
           components={{ Control: ControlComponent }}
           theme={(theme) => ({

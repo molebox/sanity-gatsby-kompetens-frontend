@@ -8,11 +8,14 @@ import Industry from '../components/industry/Industry';
 import Focus from '../components/focus/Focus';
 import PlaceHolder from '../components/results/Placeholder';
 import CompanyCard from '../components/results/CompanyCard';
-import { useSpring, animated, useTransition, useChain, config } from 'react-spring';
-import { CompanyInfo } from './../components/results/CompanyCard';
+import {useSpring, animated} from 'react-spring';
+import {CompanyInfo} from './../components/results/CompanyCard';
+
+import * as _ from 'lodash';
+import { Options } from './../components/commonTypes';
+import { ValueType } from 'react-select/lib/types';
 
 interface CompanyInfoProps {
-  data: {
     allSanityCompany: {
       edges: {
         node: {
@@ -24,6 +27,10 @@ interface CompanyInfoProps {
           website: string;
           recriutmentWebsite: string;
           biography: string;
+          focus: {
+            id: string;
+            focus: string;
+          }
           roles: {
             id: string;
             role: string;
@@ -33,9 +40,21 @@ interface CompanyInfoProps {
             skillName: string;
           }
         }
-      },
-    },
-  };
+      };
+    };
+}
+
+interface Focus {
+  id: string;
+  focus: string;
+}
+interface Roles {
+  id: string;
+  role: string;
+}
+interface Skills {
+  id: string;
+  skillName: string;
 }
 
 export const indexPageQuery = graphql`
@@ -51,6 +70,10 @@ export const indexPageQuery = graphql`
         website
         recriutmentWebsite
         biography
+        focus {
+          id
+          focus
+        }
         roles {
           id
           role
@@ -82,6 +105,46 @@ const theme = createMuiTheme({
   }
 });
 
+function MatchedFocus(selectedFocuses: string[], companyFocuses: string[]) {
+  const matchedFocuses: Focus[] = [];
+
+  const findFocusById = _.keyBy(companyFocuses, 'id');
+
+  selectedFocuses.forEach((focus: any) => {
+    const match = findFocusById[focus.id];
+    matchedFocuses.push(match);
+  });
+  return matchedFocuses;
+}
+
+function Search(company: CompanyInfoProps, selectedFocuses?: string[], selectedRoles?: Roles[], selectedSkills?: Skills[]) {
+  const matches = [];
+
+  if (selectedFocuses) {
+    console.log('selectedFocuses: ', selectedFocuses);
+    const test = MatchedFocus(selectedFocuses, company.allSanityCompany.edges);
+    console.log('TESTING FOCUS: ', test);
+
+
+  }
+
+  if (selectedRoles) {
+    company.allSanityCompany.edges.map((comp) => {
+      matches.push(comp);
+      matches.sort();
+    });
+  }
+
+  if (selectedSkills) {
+    company.allSanityCompany.edges.map((comp) => {
+      matches.push(comp);
+      matches.sort();
+    });
+  }
+
+  return matches;
+}
+
 export default function IndexPage() {
 
     const companyInfo: any = useStaticQuery(indexPageQuery);
@@ -93,6 +156,32 @@ export default function IndexPage() {
       delay: 1000,
       duration: 2000
       });
+
+    const getSelectedFocus = (selectedFocus: ValueType<Options[]>) => {
+      const focuses: string[] = [];
+      if (selectedFocus) {
+        selectedFocus.forEach((focus: Options) => {
+          focuses.push(focus.id);
+        });
+      }
+      Search(companyInfo, focuses);
+    };
+    const getSelectedRoles = (selectedRoles: ValueType<Options[]>) => {
+      const roles: string[] = [];
+      if (selectedRoles) {
+        selectedRoles.forEach((role: Options) => {
+          roles.push(role.id);
+        });
+      }
+    };
+    const getSelectedSkills = (selectedSkills: ValueType<Options[]>) => {
+      const skills: string[] = [];
+      if (selectedSkills) {
+        selectedSkills.forEach((skill: Options) => {
+          skills.push(skill.id);
+        });
+      }
+    };
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -106,9 +195,9 @@ export default function IndexPage() {
             </div>
             <div className={[styles.selections, styles.selectionContainer].join(' ')}>
             {/* <h3 style={{color: '#005056'}}>Select your...</h3> */}
-              <Focus/>
-              <Roles/>
-              <Skills/>
+              <Focus getSelectedFocus={getSelectedFocus} />
+              <Roles getSelectedRoles={getSelectedRoles} />
+              <Skills getSelectedSkills={getSelectedSkills} />
             </div>
             {companyInfo ? (
               <animated.div style={animateIn} className={styles.results}>

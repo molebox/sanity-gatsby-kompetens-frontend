@@ -16,7 +16,8 @@
       "jsx-boolean-value": [false],
       "trailing-comma": [false],
       "max-line-length": [false],
-      "jsx-no-lambda": [false]
+      "jsx-no-lambda": [false],
+      "no-unused-expression": [false]
     },
     "rulesDirectory": []
 }

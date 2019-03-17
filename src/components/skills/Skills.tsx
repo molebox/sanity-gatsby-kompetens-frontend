@@ -1,17 +1,15 @@
 import * as React from 'react';
 import Select, { components } from 'react-select';
 import { graphql, useStaticQuery } from 'gatsby';
-
-interface RoleOptions {
-  value: string;
-  label: string;
-}
+import {ValueType} from 'react-select/lib/types';
+import { Options } from './../commonTypes';
 
 const skillQuery = graphql`
 {
     allSanitySkill {
       edges {
         node {
+          id
           skillName
         }
       }
@@ -34,13 +32,20 @@ const ControlComponent  = (props: any) => (
   </div>
 );
 
-export default () => {
+interface Props {
+  getSelectedSkills: (selectedSkills: ValueType<Options[]>) => void;
+}
+
+export default ({getSelectedSkills}: Props) => {
 
     const allSkills: any = useStaticQuery(skillQuery);
-    const skills: RoleOptions[] = allSkills.allSanitySkill.edges.map(({node}: any) => ({label: node.skillName, value: node.skillName}));
+    const skills: Options[] = allSkills.allSanitySkill.edges.map(({node}: any) => ({label: node.skillName, value: node.skillName, id: node.id}));
+
+    const _handleSkills = (selections: ValueType<Options[]>) => getSelectedSkills(selections);
 
     return (
         <Select
+            onChange={_handleSkills}
             options={skills}
             components={{ Control: ControlComponent }}
             theme={(theme) => ({

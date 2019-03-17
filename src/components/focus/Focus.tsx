@@ -1,17 +1,15 @@
 import * as React from 'react';
 import Select, { components } from 'react-select';
-import { graphql, useStaticQuery } from 'gatsby';
-
-interface Options {
-  value: string;
-  label: string;
-}
+import {graphql, useStaticQuery} from 'gatsby';
+import {ValueType} from 'react-select/lib/types';
+import { Options } from './../commonTypes';
 
 const focusQuery = graphql`
 {
     allSanityFocus {
       edges {
         node {
+          id
           focus
         }
       }
@@ -34,13 +32,20 @@ const ControlComponent  = (props: any) => (
   </div>
 );
 
-export default () => {
+interface Props {
+  getSelectedFocus: (selectedFocus: ValueType<Options[]>) => void;
+}
+
+export default ({getSelectedFocus}: Props) => {
 
     const allFocus: any = useStaticQuery(focusQuery);
-    const focuses: Options[] = allFocus.allSanityFocus.edges.map(({node}: any) => ({label: node.focus, value: node.focus}));
+    const focuses: Options[] = allFocus.allSanityFocus.edges.map(({node}: any) => ({label: node.focus, value: node.focus, id: node.id}));
+
+    const _handleFocus = (selections: ValueType<Options[]>) => getSelectedFocus(selections);
 
     return (
         <Select
+            onChange={_handleFocus}
             options={focuses}
             components={{ Control: ControlComponent }}
             theme={(theme) => ({
