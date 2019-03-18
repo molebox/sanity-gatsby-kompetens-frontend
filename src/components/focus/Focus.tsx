@@ -39,7 +39,7 @@ interface Props {
 export default ({getSelectedFocus}: Props) => {
 
     const allFocus: any = useStaticQuery(focusQuery);
-    const focuses: Options[] = allFocus.allSanityFocus.edges.map(({node}: any) => ({label: node.focus, value: node.focus, id: node.id}));
+    const focuses: Options[][] = allFocus.allSanityFocus.edges.map(({node}: any) => ({label: node.focus, value: node.focus, id: node.id}));
 
     const _handleFocus = (selections: ValueType<Options[]>) => getSelectedFocus(selections);
 

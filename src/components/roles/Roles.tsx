@@ -39,7 +39,7 @@ interface Props {
 export default ({getSelectedRoles}: Props) => {
 
     const allRoles: any = useStaticQuery(roleQuery);
-    const roles: Options[] = allRoles.allSanityRole.edges.map(({node}: any) => ({label: node.role, value: node.role, id: node.id}));
+    const roles: Options[][] = allRoles.allSanityRole.edges.map(({node}: any) => ({label: node.role, value: node.role, id: node.id}));
 
     const _handleRoles = (selections: ValueType<Options[]>) => getSelectedRoles(selections);
 

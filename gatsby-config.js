@@ -1,9 +1,18 @@
+const path = require(`path`);
+
 module.exports = {
   siteMetadata: {
     name: `Competence Match`,
     tagline: `get a job`
   },  
   plugins: [
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `assets`,
+        path: path.join(__dirname, `src`, `assets`),
+      },
+    },
     `gatsby-plugin-sass`,
     `gatsby-plugin-typescript`,
     `gatsby-plugin-tslint`,
@@ -32,6 +41,8 @@ module.exports = {
           },
         ],
       },
-    }
+    },
+    `gatsby-transformer-sharp`, 
+    `gatsby-plugin-sharp`
   ],
 }

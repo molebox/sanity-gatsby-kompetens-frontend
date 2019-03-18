@@ -44,6 +44,20 @@ interface CompanyInfoProps {
     };
 }
 
+interface CompanyData {
+  id: string;
+  companyName: string,
+  contactPerson: string;
+  contactNumber: string;
+  email: string;
+  website: string;
+  recriutmentWebsite: string;
+  biography: string;
+  focus: Focus[];
+  roles: Roles[];
+  skills: Skills[];
+}
+
 interface Focus {
   id: string;
   focus: string;
@@ -105,49 +119,49 @@ const theme = createMuiTheme({
   }
 });
 
-function MatchedFocus(selectedFocuses: string[], companyFocuses: string[]) {
-  const matchedFocuses: Focus[] = [];
+// function MatchedFocus(selectedFocuses: string[], companyData: companyData[]) {
+//   const matchedFocuses: Focus[] = [];
 
-  const findFocusById = _.keyBy(companyFocuses, 'id');
+//   const findFocusById = _.keyBy(companyFocuses, 'id');
 
-  selectedFocuses.forEach((focus: any) => {
-    const match = findFocusById[focus.id];
-    matchedFocuses.push(match);
-  });
-  return matchedFocuses;
+//   selectedFocuses.forEach((focus: any) => {
+//     const match = findFocusById[focus.id];
+//     matchedFocuses.push(match);
+//   });
+//   return matchedFocuses;
+// }
+
+const findCompanyById = (companies: CompanyData[], companyName: string) => companies.find((company: CompanyData) => company.companyName === companyName);
+
+
+function getRoles(companies: CompanyData[], roleId: string) {
+  const company = findCompanyById(companies, roleId);
+  return (company && company.roles) || [];
 }
 
-function Search(company: CompanyInfoProps, selectedFocuses?: string[], selectedRoles?: Roles[], selectedSkills?: Skills[]) {
-  const matches = [];
+function getSkills(companies: CompanyData[], skillId: string) {
+  const company = findCompanyById(companies, skillId);
+  return (company && company.skills) || [];
+}
 
-  if (selectedFocuses) {
-    console.log('selectedFocuses: ', selectedFocuses);
-    const test = MatchedFocus(selectedFocuses, company.allSanityCompany.edges);
-    console.log('TESTING FOCUS: ', test);
+function getFocus(companies: CompanyData[], companyName: string) {
+  const company = findCompanyById(companies, companyName);
+  console.log(company);
+  return (company && company.focus) || [];
+}
 
-
-  }
-
-  if (selectedRoles) {
-    company.allSanityCompany.edges.map((comp) => {
-      matches.push(comp);
-      matches.sort();
-    });
-  }
-
-  if (selectedSkills) {
-    company.allSanityCompany.edges.map((comp) => {
-      matches.push(comp);
-      matches.sort();
-    });
-  }
-
-  return matches;
+function findFocus(companies: CompanyData[], focusId: string) {
+  return companies.find(({node}: any) =>
+  node.focus.some((id: string) => id === focusId)
+  );
 }
 
 export default function IndexPage() {
 
     const companyInfo: any = useStaticQuery(indexPageQuery);
+    const companies = companyInfo.allSanityCompany.edges;
+
+    // const companyInfo = null;
 
     // const {name} = props.data.site.siteMetadata;
     const animateIn = useSpring({
@@ -157,14 +171,19 @@ export default function IndexPage() {
       duration: 2000
       });
 
-    const getSelectedFocus = (selectedFocus: ValueType<Options[]>) => {
-      const focuses: string[] = [];
+    const getSelectedFocus = (selectedFocus: Options[]) => {
+      
+      const matches: any[] = [];
       if (selectedFocus) {
-        selectedFocus.forEach((focus: Options) => {
-          focuses.push(focus.id);
+        selectedFocus.forEach(({id}: Options) => {
+          const test = getFocus(companies, id);
+          const matchedFocus = findFocus(companies, id);
+          console.log({test});
+
+          matches.push(matchedFocus);
         });
       }
-      Search(companyInfo, focuses);
+      console.log({matches})
     };
     const getSelectedRoles = (selectedRoles: ValueType<Options[]>) => {
       const roles: string[] = [];
@@ -201,18 +220,18 @@ export default function IndexPage() {
             </div>
             {companyInfo ? (
               <animated.div style={animateIn} className={styles.results}>
-                 {companyInfo.allSanityCompany.edges.map((props: CompanyInfo) => {
+                 {companyInfo.allSanityCompany.edges.map(({node}: CompanyInfoProps) => {
                     return (
-                      <div key={props.node.id}>
+                      <div key={node.id}>
                         <CompanyCard
-                          id={props.node.id}
-                          companyName={props.node.companyName}
-                          contactPerson={props.node.contactPerson}
-                          email={props.node.email}
-                          contactNumber={props.node.contactNumber}
-                          website={props.node.website}
-                          recruitmentWebsite={props.node.recruitmentWebsite}
-                          biography={props.node.biography}
+                          id={node.id}
+                          companyName={node.companyName}
+                          contactPerson={node.contactPerson}
+                          email={node.email}
+                          contactNumber={node.contactNumber}
+                          website={node.website}
+                          recruitmentWebsite={node.recruitmentWebsite}
+                          biography={node.biography}
                         />
                       </div >
                     );

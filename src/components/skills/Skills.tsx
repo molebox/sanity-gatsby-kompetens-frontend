@@ -39,7 +39,7 @@ interface Props {
 export default ({getSelectedSkills}: Props) => {
 
     const allSkills: any = useStaticQuery(skillQuery);
-    const skills: Options[] = allSkills.allSanitySkill.edges.map(({node}: any) => ({label: node.skillName, value: node.skillName, id: node.id}));
+    const skills: Options[][] = allSkills.allSanitySkill.edges.map(({node}: any) => ({label: node.skillName, value: node.skillName, id: node.id}));
 
     const _handleSkills = (selections: ValueType<Options[]>) => getSelectedSkills(selections);
 

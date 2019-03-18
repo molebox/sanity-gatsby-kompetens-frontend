@@ -1,23 +1,34 @@
 import * as React from 'react';
+import { graphql } from "gatsby"
+import Img from "gatsby-image"
 import * as styles from './PlaceHolder.module.scss';
 
 interface Props {
     isVisible: boolean;
 }
 
-export default function PlaceHolder({isVisible}: Props) {
-
-    return isVisible ? (
-        <div className={styles.outerContainer}>
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <h2>Which companies match your skills?</h2>
-                </div>
-                <div className={styles.content}>
-                    <h3>Finding the right company to work for can be a hard task. Its even harder trying to second guess if you are a good match for a prospective employer.</h3>
-                    <h3>Begin by thinking about the things that <em>you</em> are good at, and then find the right company that matches <em>your</em> skillsets.</h3>
-                </div>
-            </div>
-        </div>
-    ) : null;
+export default function PlaceHolder({data}: any) {
+console.log({data});
+    return <div><Img fixed={data.file.childImageSharp.fixed} /></div>
+    // return data ? (
+    //     <div className={styles.outerContainer}>
+    //         <div className={styles.container}>
+    //         <Img fixed={data.file.childImageSharp.fixed} />
+    //         </div>
+    //     </div>
+    // ) : null;
 }
+
+export const query = graphql`
+  query {
+    file(relativePath: { eq: "assets/happy-office.jpg" }) {
+      childImageSharp {
+        # Specify the image processing specifications right in the query.
+        # Makes it trivial to update as your page's design changes.
+        fixed(width: 125, height: 125) {
+          ...GatsbyImageSharpFixed
+        }
+      }
+    }
+  }
+`
