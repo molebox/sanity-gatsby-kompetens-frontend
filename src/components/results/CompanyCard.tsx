@@ -23,6 +23,7 @@ export default function CompanyCard(props: CompanyInfo) {
             <h4>{props.website}</h4>
             <h4>{props.recruitmentWebsite}</h4>
             <p>{props.biography}</p>
+            {/* <div className={styles.fadeout}/> */}
         </div>
     );
 }

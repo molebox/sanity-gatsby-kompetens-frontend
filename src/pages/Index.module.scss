@@ -17,16 +17,35 @@ body {
   font-family: 'Montserrat', sans-serif;
   // overflow-x: hidden;
 
-  background-color: #E5E5E5;
+  background-color: #ccc;
+}
+
+.outerContainer {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+
+  grid-template-areas: 
+  "showcase"
+  "container";
+}
+
+.showcase {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  grid-area: showcase;
 }
 
 .container {
   display: grid;
-  height: 100vh;
+  // height: 100vh;
   margin: 0;
+  grid-area: container;
+
 
   grid-template-columns: 20% 1fr 15%;
-  grid-template-rows: 60px 1fr 60px;
+  grid-template-rows: 1fr 60px;
 
   grid-template-areas: 
   "header header header"
@@ -39,7 +58,7 @@ body {
 // Main layout header
 .header {
     grid-area: header;
-    background-color: #E5E5E5;
+    background-color: #ccc;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -57,7 +76,7 @@ body {
     display: grid;
     grid-gap: 15px;
     padding: 1em;
-    background-color: #E5E5E5;
+    background-color: #ccc;
 
     grid-template-columns: 1fr 3fr 4fr 1fr 1fr;
     grid-template-rows: 1fr 6fr .5fr;
@@ -108,15 +127,15 @@ body {
 .resultsContainer {
   width: 100%;
   height: 100%;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-  transition: box-shadow 0.5s;
-  will-change: transform;
-  border: 15px solid white;
+  background: #ccc;
+  // border-radius: 20px;
+  // box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+  // transition: box-shadow 0.5s;
+  // will-change: transform;
+  // border: 15px solid #ccc;
   // overflow: scroll;
-  // overflow-y: scroll;
-  // overflow-x: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .card {
