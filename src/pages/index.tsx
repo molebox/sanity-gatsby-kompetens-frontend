@@ -134,23 +134,29 @@ const theme = createMuiTheme({
 //   return matchedFocuses;
 // }
 
-const findCompanyById = (companies: CompanyData[], companyName: string) => companies.find((company: CompanyData) => company.companyName === companyName);
+const findCompanyFocusById = (companies: CompanyData[], id: string) => companies.find((company: CompanyData) => company.node.focus.some((focus) => focus.id === id));
 
-function getRoles(companies: CompanyData[], roleId: string) {
-  const company = findCompanyById(companies, roleId);
-  return (company && company.node.roles) || [];
+// function getRoles(companies: CompanyData[], roleId: string) {
+//   const company = findCompanyById(companies, roleId);
+//   return (company && company.node.roles) || [];
+// }
+
+// function getSkills(companies: CompanyData[], skillId: string) {
+//   const company = findCompanyById(companies, skillId);
+//   return (company && company.node.skills) || [];
+// }
+
+// function getCompanyFocus(companies: CompanyData[], focusId: string) {
+//   const company = findCompanyById(companies, focusId);
+//   console.log(company);
+//   return (company && company.node.focus) || [];
+// }
+
+function match(companies: CompanyData[], focusId: string) {
+  const items = companies.filter((item) => item.node.focus.indexOf(focusId) !== -1);
+  return items;
 }
 
-function getSkills(companies: CompanyData[], skillId: string) {
-  const company = findCompanyById(companies, skillId);
-  return (company && company.node.skills) || [];
-}
-
-function getFocus(companies: CompanyData[], companyName: string) {
-  const company = findCompanyById(companies, companyName);
-  console.log(company);
-  return (company && company.node.focus) || [];
-}
 
 function findFocus(companies: CompanyData[], focusId: string) {
   return companies.find(({node}: CompanyData) =>
@@ -163,7 +169,7 @@ function getAllCompaniesFocuses(companies: CompanyData[]) {
 }
 
 function searchFocuses(compFocuses: Focus[], selectedFocuses: Focus[]) {
-  console.log('searchFocuses: ', compFocuses.filter((focus) => !selectedFocuses.includes(focus)));
+  // console.log('searchFocuses: ', compFocuses.filter((focus) => !selectedFocuses.includes(focus)));
   return compFocuses.filter((focus) => !selectedFocuses.includes(focus));
 }
 
@@ -196,6 +202,8 @@ export default function IndexPage() {
     const companyInfo: any = useStaticQuery(indexPageQuery);
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
 
+    console.log('COMPANIES: ', companies);
+
     const focuses = companies.reduce((total: Focus[], amount: CompanyData) => {
       amount.node.focus.forEach((focus: Focus) => {
           total.push(focus);
@@ -203,19 +211,19 @@ export default function IndexPage() {
       return total;
     }, []);
 
-    const skills = companies.reduce((total: Skills[], amount: CompanyData) => {
-      amount.node.skills.forEach((skill: Skills) => {
-          total.push(skill);
-      });
-      return total;
-    }, []);
+    // const skills = companies.reduce((total: Skills[], amount: CompanyData) => {
+    //   amount.node.skills.forEach((skill: Skills) => {
+    //       total.push(skill);
+    //   });
+    //   return total;
+    // }, []);
 
-    const roles = companies.reduce((total: Roles[], amount: CompanyData) => {
-      amount.node.roles.forEach((role: Roles) => {
-          total.push(role);
-      });
-      return total;
-    }, []);
+    // const roles = companies.reduce((total: Roles[], amount: CompanyData) => {
+    //   amount.node.roles.forEach((role: Roles) => {
+    //       total.push(role);
+    //   });
+    //   return total;
+    // }, []);
 
     // const {name} = props.data.site.siteMetadata;
     const animateIn = useSpring({
@@ -226,31 +234,40 @@ export default function IndexPage() {
       });
 
     const getSelectedFocus = (selectedFocus: Options[]) => {
+      console.log('THE SELECTED FOCUS: ', selectedFocus);
       setIsSelectedMade(true);
 
       const allFocus: any[] = _.flattenDeep(getAllCompaniesFocuses(companies));
-      console.log('focuses: ', allFocus);
+      // console.log('focuses: ', allFocus);
 
-      const selectionFocus: Focus[] = createFocusObject(selectedFocus);
+      allFocus.forEach((focus) => {
+        const test = match(companies, focus.id);
+        console.log('test: ', test);
+      });
 
-      const focusResult = searchFocuses(focuses, selectionFocus);
-      console.log('focusResult: ', focusResult);
+      console.log('matchedComps: ', matchedComps);
 
-      const matches: any[] = [];
-      if (selectedFocus) {
-        selectedFocus.forEach(({id}: Options) => {
-          focuses.forEach((focus: Focus) => {
-            if (id === focus.id) {
-              const matchedFocus = findFocus(companies, id);
-              matches.push(matchedFocus);
-              setMatchedComps([...matches]);
-            }
-          });
-        });
-      }
-      console.log({matchedComps});
+      // const selectionFocus: Focus[] = createFocusObject(selectedFocus);
+
+      // const focusResult = searchFocuses(focuses, selectionFocus);
+      // console.log('focusResult: ', focusResult);
+
+      // const matches: any[] = [];
+      // if (selectedFocus) {
+      //   selectedFocus.forEach(({id}: Options) => {
+      //     focuses.forEach((focus: Focus) => {
+      //       if (id === focus.id) {
+      //         const matchedFocus = findFocus(companies, id);
+      //         matches.push(matchedFocus);
+      //         setMatchedComps([...matches]);
+      //       }
+      //     });
+      //   });
+      // }
+      // console.log({matchedComps});
     };
     const getSelectedRoles = (selectedRoles: ValueType<Options[]>) => {
+      console.log('THE SELECTED ROLES: ', selectedRoles);
       setIsSelectedMade(true);
       const roles: string[] = [];
       if (selectedRoles) {
@@ -260,6 +277,7 @@ export default function IndexPage() {
       }
     };
     const getSelectedSkills = (selectedSkills: ValueType<Options[]>) => {
+      console.log('THE SELECTED SKILLS: ', selectedSkills);
       setIsSelectedMade(true);
       const skills: string[] = [];
       if (selectedSkills) {
