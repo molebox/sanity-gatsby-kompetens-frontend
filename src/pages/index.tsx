@@ -13,7 +13,7 @@ import {CompanyInfo} from './../components/results/CompanyCard';
 import Background from '../components/Background';
 
 import * as _ from 'lodash';
-import { Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses } from '../components/utilities';
+import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, search, MatchedSelection } from '../components/utilities';
 import { ValueType } from 'react-select/lib/types';
 
 export const indexPageQuery = graphql`
@@ -103,42 +103,52 @@ export default function IndexPage() {
 
     const getSelectedFocus = (selectedFocus: Options[]) => {
       console.log('THE SELECTED FOCUS: ', selectedFocus);
-      setIsSelectedMade(true);
 
       const selected = createFocusObject(selectedFocus);
-
-      const matchedFocuses = allCompanyFocuses.map((comp) => {
+      const matchedFocuses: Array<MatchedSelection<FocusProps>> = allCompanyFocuses.map((comp) => {
       const found = getAllCompaniesFocuses(comp.focus, selected);
-      return {matches: found, companyId: comp.id};
+      return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      console.log('selectedFocuses: ', matchedFocuses);
+      const test = search(companies, matchedFocuses);
+      console.log('focus search result: ', test);
+
+      console.log('matchedFocuses: ', matchedFocuses);
     };
 
-    const getSelectedRoles = (selectedRoles: ValueType<Options[]>) => {
+    const getSelectedRoles = (selectedRoles: Options[]) => {
       console.log('THE SELECTED ROLES: ', selectedRoles);
-      setIsSelectedMade(true);
-      const roles: string[] = [];
-      if (selectedRoles) {
-        selectedRoles.forEach((role: Options) => {
-          roles.push(role.id);
-        });
-      }
+
+      const selected = createRoleObject(selectedRoles);
+      const matchedRoles: Array<MatchedSelection<RolesProps>> = allCompanyRoles.map((comp) => {
+      const found = getAllCompaniesRoles(comp.roles, selected);
+      return {matches: found, companyId: comp.id, hits: found.length};
+    });
+
+      const test = search(companies, matchedRoles);
+      console.log('roles search result: ', test);
+
+      console.log('matchedRoles: ', matchedRoles);
     };
-    const getSelectedSkills = (selectedSkills: ValueType<Options[]>) => {
+
+    const getSelectedSkills = (selectedSkills: Options[]) => {
       console.log('THE SELECTED SKILLS: ', selectedSkills);
-      setIsSelectedMade(true);
-      const skills: string[] = [];
-      if (selectedSkills) {
-        selectedSkills.forEach((skill: Options) => {
-          skills.push(skill.id);
-        });
-      }
+
+      const selected = createSkillObject(selectedSkills);
+      const matchedSkills = allCompanySkills.map((comp) => {
+      const found = getAllCompaniesSkills(comp.skills, selected);
+      return {matches: found, companyId: comp.id, hits: found.length};
+    });
+
+      const test = search(companies, matchedSkills);
+      console.log('skills search result: ', test);
+
+      console.log('matchedSkills: ', matchedSkills);
     };
 
     return (
       <MuiThemeProvider theme={theme}>
-        <div className={styles.outerContainer}>
+        <div >
           {/* <div className={styles.showcase}>
           <Background>
             <h1>TEST</h1>

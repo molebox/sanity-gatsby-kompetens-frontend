@@ -62,6 +62,12 @@
     skillName: string;
   }
 
+ export interface MatchedSelection<T> {
+    matches: T[];
+    companyId: string;
+    hits: number;
+  }
+
   // tslint:disable-next-line: adjacent-overload-signatures
  export function getAllCompaniesFocuses(companyFocus: FocusProps[], selected: FocusProps[]) {
   return companyFocus.filter((compFocus) => {
@@ -97,6 +103,46 @@
     selectionFocus.push(focus);
   });
   return selectionFocus;
+}
+
+ export function createRoleObject(selectedRole: Options[]) {
+  const selectionRole: RolesProps[] = [];
+  selectedRole.forEach(({ id, value }: Options) => {
+    const role = {
+      id,
+      role: value
+    };
+    selectionRole.push(role);
+  });
+  return selectionRole;
+}
+
+ export function createSkillObject(selectedSkill: Options[]) {
+  const selectionSkill: SkillsProps[] = [];
+  selectedSkill.forEach(({ id, value }: Options) => {
+    const skill = {
+      id,
+      skillName: value
+    };
+    selectionSkill.push(skill);
+  });
+  return selectionSkill;
+}
+
+ export function search(allCompanies: CompanyData[], selectedFocus?: Array<MatchedSelection<FocusProps>>, selectedSkill?: Array<MatchedSelection<SkillsProps>>, selectedRole?: Array<MatchedSelection<RolesProps>>) {
+  const matchedCompanies: CompanyData[] = [];
+
+  if (selectedFocus) {
+    return selectedFocus.filter((focus) => focus.hits > 0).sort();
+  }
+
+  if (selectedSkill) {
+    return selectedSkill.filter((skill) => skill.hits > 0).sort();
+  }
+
+  if (selectedRole) {
+    return selectedRole.filter((role) => role.hits > 0).sort();
+  }
 }
 
 // function getRoles(companies: CompanyData[], roleId: string) {
