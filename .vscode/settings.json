@@ -1,3 +1,7 @@
 {
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "prettier.jsxSingleQuote": true,
+    "prettier.printWidth": 120,
+    "prettier.singleQuote": true,
+    "prettier.useTabs": true
 }

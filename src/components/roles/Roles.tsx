@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Select, { components } from 'react-select';
 import { graphql, useStaticQuery } from 'gatsby';
-import { Options } from './../commonTypes';
+import { Options } from '../utilities';
 import { ValueType } from 'react-select/lib/types';
 
 const roleQuery = graphql`

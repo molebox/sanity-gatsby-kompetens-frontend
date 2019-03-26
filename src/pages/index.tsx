@@ -13,66 +13,8 @@ import {CompanyInfo} from './../components/results/CompanyCard';
 import Background from '../components/Background';
 
 import * as _ from 'lodash';
-import { Options } from './../components/commonTypes';
+import { Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses } from '../components/utilities';
 import { ValueType } from 'react-select/lib/types';
-
-interface CompanyInfoProps {
-    allSanityCompany: {
-      edges: {
-        node: {
-          id: string;
-          companyName: string,
-          contactPerson: string;
-          contactNumber: string;
-          email: string;
-          website: string;
-          recriutmentWebsite: string;
-          biography: string;
-          focus: {
-            id: string;
-            focus: string;
-          }
-          roles: {
-            id: string;
-            role: string;
-          }
-          skills: {
-            id: string;
-            skillName: string;
-          }
-        }
-      };
-    };
-}
-
-interface CompanyData {
-  node: {
-    id: string;
-    companyName: string,
-    contactPerson: string;
-    contactNumber: string;
-    email: string;
-    website: string;
-    recruitmentWebsite: string;
-    biography: string;
-    focus: Focus[];
-    roles: Roles[];
-    skills: Skills[];
-  };
-}
-
-interface Focus {
-  id: string;
-  focus: string;
-}
-interface Roles {
-  id: string;
-  role: string;
-}
-interface Skills {
-  id: string;
-  skillName: string;
-}
 
 export const indexPageQuery = graphql`
 {
@@ -122,41 +64,7 @@ const theme = createMuiTheme({
   }
 });
 
-// function MatchedFocus(selectedFocuses: string[], companyData: companyData[]) {
-//   const matchedFocuses: Focus[] = [];
-
-//   const findFocusById = _.keyBy(companyFocuses, 'id');
-
-//   selectedFocuses.forEach((focus: any) => {
-//     const match = findFocusById[focus.id];
-//     matchedFocuses.push(match);
-//   });
-//   return matchedFocuses;
-// }
-
 const findCompanyFocusById = (companies: CompanyData[], id: string) => companies.find((company: CompanyData) => company.node.focus.some((focus) => focus.id === id));
-
-// function getRoles(companies: CompanyData[], roleId: string) {
-//   const company = findCompanyById(companies, roleId);
-//   return (company && company.node.roles) || [];
-// }
-
-// function getSkills(companies: CompanyData[], skillId: string) {
-//   const company = findCompanyById(companies, skillId);
-//   return (company && company.node.skills) || [];
-// }
-
-// function getCompanyFocus(companies: CompanyData[], focusId: string) {
-//   const company = findCompanyById(companies, focusId);
-//   console.log(company);
-//   return (company && company.node.focus) || [];
-// }
-
-function match(companies: CompanyData[], focusId: string) {
-  const items = companies.filter((item) => item.node.focus.indexOf(focusId) !== -1);
-  return items;
-}
-
 
 function findFocus(companies: CompanyData[], focusId: string) {
   return companies.find(({node}: CompanyData) =>
@@ -164,66 +72,26 @@ function findFocus(companies: CompanyData[], focusId: string) {
   );
 }
 
-function getAllCompaniesFocuses(companies: CompanyData[]) {
-  return _.map(companies, _.property('node.focus'));
-}
-
-function searchFocuses(compFocuses: Focus[], selectedFocuses: Focus[]) {
-  // console.log('searchFocuses: ', compFocuses.filter((focus) => !selectedFocuses.includes(focus)));
-  return compFocuses.filter((focus) => !selectedFocuses.includes(focus));
-}
-
-function searchSkills(compSkills: Skills[], selectedSkills: Options[]) {
-  console.log('searchSkills: ', compSkills.filter((skill) => !selectedSkills.includes(skill)));
-  return compSkills.filter((skill) => !selectedSkills.includes(skill));
-}
-
-function searchRoles(compRoles: Roles[], selectedRoles: Options[]) {
-  console.log('searchRoles: ', compRoles.filter((role) => !selectedRoles.includes(role)));
-  return compRoles.filter((role) => !selectedRoles.includes(role));
-}
-
-function createFocusObject(selectedFocus: Options[]) {
-  const selectionFocus: Focus[] = [];
-  selectedFocus.forEach(({ id, value }: Options) => {
-    const focus = {
-      id,
-      focus: value
-    };
-    selectionFocus.push(focus);
-  });
-  return selectionFocus;
-}
-
 export default function IndexPage() {
 
     const [matchedComps, setMatchedComps] = React.useState<CompanyData[]>([]);
     const [isSelectedMade, setIsSelectedMade] = React.useState(false);
+    const [matchedFocus, setMatchedFocus] = React.useState({});
+
     const companyInfo: any = useStaticQuery(indexPageQuery);
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
 
-    console.log('COMPANIES: ', companies);
+    const allCompanyFocuses = companies.map((company: CompanyData) => {
+      return {id: company.node.id, focus: company.node.focus};
+    });
 
-    const focuses = companies.reduce((total: Focus[], amount: CompanyData) => {
-      amount.node.focus.forEach((focus: Focus) => {
-          total.push(focus);
-      });
-      return total;
-    }, []);
+    const allCompanySkills = companies.map((company: CompanyData) => {
+      return {id: company.node.id, skills: company.node.skills};
+    });
 
-    // const skills = companies.reduce((total: Skills[], amount: CompanyData) => {
-    //   amount.node.skills.forEach((skill: Skills) => {
-    //       total.push(skill);
-    //   });
-    //   return total;
-    // }, []);
-
-    // const roles = companies.reduce((total: Roles[], amount: CompanyData) => {
-    //   amount.node.roles.forEach((role: Roles) => {
-    //       total.push(role);
-    //   });
-    //   return total;
-    // }, []);
+    const allCompanyRoles = companies.map((company: CompanyData) => {
+      return {id: company.node.id, roles: company.node.roles};
+    });
 
     // const {name} = props.data.site.siteMetadata;
     const animateIn = useSpring({
@@ -237,35 +105,16 @@ export default function IndexPage() {
       console.log('THE SELECTED FOCUS: ', selectedFocus);
       setIsSelectedMade(true);
 
-      const allFocus: any[] = _.flattenDeep(getAllCompaniesFocuses(companies));
-      // console.log('focuses: ', allFocus);
+      const selected = createFocusObject(selectedFocus);
 
-      allFocus.forEach((focus) => {
-        const test = match(companies, focus.id);
-        console.log('test: ', test);
-      });
+      const matchedFocuses = allCompanyFocuses.map((comp) => {
+      const found = getAllCompaniesFocuses(comp.focus, selected);
+      return {matches: found, companyId: comp.id};
+    });
 
-      console.log('matchedComps: ', matchedComps);
-
-      // const selectionFocus: Focus[] = createFocusObject(selectedFocus);
-
-      // const focusResult = searchFocuses(focuses, selectionFocus);
-      // console.log('focusResult: ', focusResult);
-
-      // const matches: any[] = [];
-      // if (selectedFocus) {
-      //   selectedFocus.forEach(({id}: Options) => {
-      //     focuses.forEach((focus: Focus) => {
-      //       if (id === focus.id) {
-      //         const matchedFocus = findFocus(companies, id);
-      //         matches.push(matchedFocus);
-      //         setMatchedComps([...matches]);
-      //       }
-      //     });
-      //   });
-      // }
-      // console.log({matchedComps});
+      console.log('selectedFocuses: ', matchedFocuses);
     };
+
     const getSelectedRoles = (selectedRoles: ValueType<Options[]>) => {
       console.log('THE SELECTED ROLES: ', selectedRoles);
       setIsSelectedMade(true);
@@ -290,11 +139,11 @@ export default function IndexPage() {
     return (
       <MuiThemeProvider theme={theme}>
         <div className={styles.outerContainer}>
-          <div className={styles.showcase}>
+          {/* <div className={styles.showcase}>
           <Background>
             <h1>TEST</h1>
           </Background>
-          </div>
+          </div> */}
             <div className={styles.container}>
               <div className={styles.header}>
                 <h1>A title could go here...</h1>
@@ -326,8 +175,7 @@ export default function IndexPage() {
                             />
                           </animated.div >
                         );
-                      })
-                  }
+                      })}
                 </animated.div>
                 ) : (
                   <div className={styles.results}>
