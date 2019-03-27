@@ -1,3 +1,5 @@
+ import * as _ from 'lodash';
+ 
  export interface Options {
     id: string;
     value: string;
@@ -129,19 +131,26 @@
   return selectionSkill;
 }
 
+ export const getFocusHits = (selectedFocus?: Array<MatchedSelection<FocusProps>>) => selectedFocus ? selectedFocus.filter((focus) => focus.hits) : undefined;
+
+ export const getSkillsHits = (selectedSkill?: Array<MatchedSelection<SkillsProps>>) => selectedSkill ? selectedSkill.filter((skill) => skill.hits) : undefined;
+
+ export const getRoleHits = (selectedRole?: Array<MatchedSelection<RolesProps>>) => selectedRole ? selectedRole.filter((role) => role.hits) : undefined;
+
  export function search(allCompanies: CompanyData[], selectedFocus?: Array<MatchedSelection<FocusProps>>, selectedSkill?: Array<MatchedSelection<SkillsProps>>, selectedRole?: Array<MatchedSelection<RolesProps>>) {
   const matchedCompanies: CompanyData[] = [];
 
   if (selectedFocus) {
-    return selectedFocus.filter((focus) => focus.hits > 0).sort();
+    return selectedFocus.sort((a, b) => a.hits - b.hits);
+    // return selectedFocus.filter((focus) => focus.hits);
   }
 
   if (selectedSkill) {
-    return selectedSkill.filter((skill) => skill.hits > 0).sort();
+    return selectedSkill.filter((skill) => skill.hits);
   }
 
   if (selectedRole) {
-    return selectedRole.filter((role) => role.hits > 0).sort();
+    return selectedRole.filter((role) => role.hits);
   }
 }
 

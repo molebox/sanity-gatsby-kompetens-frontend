@@ -13,7 +13,7 @@ import {CompanyInfo} from './../components/results/CompanyCard';
 import Background from '../components/Background';
 
 import * as _ from 'lodash';
-import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, search, MatchedSelection } from '../components/utilities';
+import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, search, MatchedSelection, getFocusHits, getRoleHits, getSkillsHits } from '../components/utilities';
 import { ValueType } from 'react-select/lib/types';
 
 export const indexPageQuery = graphql`
@@ -110,8 +110,14 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      const test = search(companies, matchedFocuses);
-      console.log('focus search result: ', test);
+      const focusHits = getFocusHits( matchedFocuses);
+      console.log('focus search result: ', focusHits);
+
+      const totalHits = matchedFocuses.reduce((accumulator: any, focus) => {
+        return {hits: accumulator + focus.hits, companyId: focus.companyId};
+      }, 0);
+
+      console.log('totalHits: ', totalHits);
 
       console.log('matchedFocuses: ', matchedFocuses);
     };
@@ -125,7 +131,7 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      const test = search(companies, matchedRoles);
+      const test = getRoleHits(matchedRoles);
       console.log('roles search result: ', test);
 
       console.log('matchedRoles: ', matchedRoles);
@@ -140,7 +146,7 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      const test = search(companies, matchedSkills);
+      const test = getSkillsHits(matchedSkills);
       console.log('skills search result: ', test);
 
       console.log('matchedSkills: ', matchedSkills);
