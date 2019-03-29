@@ -20,26 +20,26 @@ body {
   background-color: #ccc;
 }
 
-.outerContainer {
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
+// .outerContainer {
+//   display: grid;
+//   grid-template-rows: repeat(2, 1fr);
 
-  grid-template-areas: 
-  "showcase"
-  "container";
-}
+//   grid-template-areas: 
+//   "showcase"
+//   "container";
+// }
 
-.showcase {
-  display: flex;
-  flex: 1;
-  height: 100%;
-  width: 100%;
-  grid-area: showcase;
-}
+// .showcase {
+//   display: flex;
+//   flex: 1;
+//   height: 100%;
+//   width: 100%;
+//   grid-area: showcase;
+// }
 
 .container {
   display: grid;
-  // height: 100vh;
+  height: 100vh;
   margin: 0;
   grid-area: container;
 

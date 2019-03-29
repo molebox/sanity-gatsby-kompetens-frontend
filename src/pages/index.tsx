@@ -13,8 +13,9 @@ import {CompanyInfo} from './../components/results/CompanyCard';
 import Background from '../components/Background';
 
 import * as _ from 'lodash';
-import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, search, MatchedSelection, getFocusHits, getRoleHits, getSkillsHits } from '../components/utilities';
+import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, search, MatchedSelection, getFocusHits, getRoleHits, getSkillsHits, sortByHits } from '../components/utilities';
 import { ValueType } from 'react-select/lib/types';
+import Button from '@material-ui/core/Button';
 
 export const indexPageQuery = graphql`
 {
@@ -74,9 +75,12 @@ function findFocus(companies: CompanyData[], focusId: string) {
 
 export default function IndexPage() {
 
-    const [matchedComps, setMatchedComps] = React.useState<CompanyData[]>([]);
-    const [isSelectedMade, setIsSelectedMade] = React.useState(false);
-    const [matchedFocus, setMatchedFocus] = React.useState({});
+    // const [matchedComps, setMatchedComps] = React.useState<CompanyData[]>([]);
+    const matchedComps: CompanyData[] = [];
+    const [focusHits, setFocusHits] = React.useState<Array<MatchedSelection<FocusProps>> | undefined>(undefined);
+    const [rolesHits, setRolesHits] = React.useState<Array<MatchedSelection<RolesProps>> | undefined>(undefined);
+    const [skillsHits, setSkillsHits] = React.useState<Array<MatchedSelection<SkillsProps>> | undefined>(undefined);
+
 
     const companyInfo: any = useStaticQuery(indexPageQuery);
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
@@ -110,16 +114,7 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      const focusHits = getFocusHits( matchedFocuses);
-      console.log('focus search result: ', focusHits);
-
-      const totalHits = matchedFocuses.reduce((accumulator: any, focus) => {
-        return {hits: accumulator + focus.hits, companyId: focus.companyId};
-      }, 0);
-
-      console.log('totalHits: ', totalHits);
-
-      console.log('matchedFocuses: ', matchedFocuses);
+      setFocusHits(sortByHits<FocusProps>( matchedFocuses));
     };
 
     const getSelectedRoles = (selectedRoles: Options[]) => {
@@ -131,10 +126,7 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      const test = getRoleHits(matchedRoles);
-      console.log('roles search result: ', test);
-
-      console.log('matchedRoles: ', matchedRoles);
+      setRolesHits(sortByHits<RolesProps>(matchedRoles));
     };
 
     const getSelectedSkills = (selectedSkills: Options[]) => {
@@ -146,15 +138,25 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      const test = getSkillsHits(matchedSkills);
-      console.log('skills search result: ', test);
+      setSkillsHits(sortByHits<SkillsProps>(matchedSkills));
+    };
 
-      console.log('matchedSkills: ', matchedSkills);
+    const handleSearch = () => {
+
+      const test = [...focusHits, ...rolesHits, ...skillsHits];
+      const sorted = test.sort((a, b) => (a.hits < b.hits ? 1 : -1));
+
+      sorted.forEach((result) => {
+        if (result.matches.length === 0) {
+          _.pull(sorted, result);
+        }
+      });
+
+      console.log('sorted: ', sorted);
     };
 
     return (
       <MuiThemeProvider theme={theme}>
-        <div >
           {/* <div className={styles.showcase}>
           <Background>
             <h1>TEST</h1>
@@ -173,10 +175,11 @@ export default function IndexPage() {
                   <Focus getSelectedFocus={getSelectedFocus} />
                   <Roles getSelectedRoles={getSelectedRoles} />
                   <Skills getSelectedSkills={getSelectedSkills} />
+                  <Button variant="contained" onClick={handleSearch}>Search</Button>
                 </div>
-                {isSelectedMade ? (
+                {matchedComps.length ? (
                   <animated.div style={animateIn} className={[styles.results, styles.resultsContainer].join(' ')}>
-                    {companyInfo.allSanityCompany.edges.map(({node}: CompanyData) => {
+                    {matchedComps.map(({node}: CompanyData) => {
                         return (
                           <animated.div style={animateIn} key={node.id}>
                             <CompanyCard
@@ -202,7 +205,6 @@ export default function IndexPage() {
                 <div className={styles.footer}/>
               </div>
             </div>
-        </div>
       </MuiThemeProvider>
     );
 }

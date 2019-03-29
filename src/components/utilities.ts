@@ -51,15 +51,19 @@
     };
   }
 
- export interface FocusProps {
+ interface Base {
+   id: string;
+ }
+
+ export interface FocusProps extends Base {
     id: string;
     focus: string;
   }
- export interface RolesProps {
+ export interface RolesProps extends Base {
     id: string;
     role: string;
   }
- export interface SkillsProps {
+ export interface SkillsProps extends Base {
     id: string;
     skillName: string;
   }
@@ -131,28 +135,36 @@
   return selectionSkill;
 }
 
- export const getFocusHits = (selectedFocus?: Array<MatchedSelection<FocusProps>>) => selectedFocus ? selectedFocus.filter((focus) => focus.hits) : undefined;
+//  export const getFocusHits = (selectedFocus?: Array<MatchedSelection<FocusProps>>) => selectedFocus ? selectedFocus.filter((focus) => focus.hits) : undefined;
 
- export const getSkillsHits = (selectedSkill?: Array<MatchedSelection<SkillsProps>>) => selectedSkill ? selectedSkill.filter((skill) => skill.hits) : undefined;
+//  export const getSkillsHits = (selectedSkill?: Array<MatchedSelection<SkillsProps>>) => selectedSkill ? selectedSkill.filter((skill) => skill.hits) : undefined;
 
- export const getRoleHits = (selectedRole?: Array<MatchedSelection<RolesProps>>) => selectedRole ? selectedRole.filter((role) => role.hits) : undefined;
+//  export const getRoleHits = (selectedRole?: Array<MatchedSelection<RolesProps>>) => selectedRole ? selectedRole.filter((role) => role.hits) : undefined;
 
- export function search(allCompanies: CompanyData[], selectedFocus?: Array<MatchedSelection<FocusProps>>, selectedSkill?: Array<MatchedSelection<SkillsProps>>, selectedRole?: Array<MatchedSelection<RolesProps>>) {
-  const matchedCompanies: CompanyData[] = [];
-
-  if (selectedFocus) {
-    return selectedFocus.sort((a, b) => a.hits - b.hits);
-    // return selectedFocus.filter((focus) => focus.hits);
-  }
-
-  if (selectedSkill) {
-    return selectedSkill.filter((skill) => skill.hits);
-  }
-
-  if (selectedRole) {
-    return selectedRole.filter((role) => role.hits);
-  }
+// tslint:disable-next-line: adjacent-overload-signatures
+ export function getAllCompaniesDetails<T extends Base>(companyDetail: T[], selected: T[]) {
+  return companyDetail.filter((comp) => {
+    return selected.find((selectedOption) => {
+      return comp.id === selectedOption.id;
+    });
+  });
 }
+
+ export function sortByHits<T>(selected?: Array<MatchedSelection<T>>) {
+    return selected ? selected.sort((a, b) => (a.hits < b.hits ? 1 : -1)) : undefined;
+ }
+
+//  export function getMatches<T extends Base>(companies: CompanyData[], selectedOptions: Options[]) {
+//   const allCompanyDetails = companies.map((company: CompanyData) => {
+//     return {id: company.node.id, roles: company.node.roles};
+//   });
+//   const selected = createRoleObject(selectedOptions);
+//   const matched: Array<MatchedSelection<T>> = allCompanyDetails.map((comp) => {
+//     const found = getAllCompaniesDetails<T>(comp.roles, selected);
+//     return {matches: found, companyId: comp.id, hits: found.length};
+//   });
+//  }
+
 
 // function getRoles(companies: CompanyData[], roleId: string) {
 //   const company = findCompanyById(companies, roleId);
