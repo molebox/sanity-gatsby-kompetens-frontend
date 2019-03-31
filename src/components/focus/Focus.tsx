@@ -33,7 +33,7 @@ const ControlComponent  = (props: any) => (
 );
 
 interface Props {
-  getSelectedFocus: (selectedFocus: ValueType<Options[]>) => void;
+  getSelectedFocus: (selectedFocus: Options[]) => void;
 }
 
 export default ({getSelectedFocus}: Props) => {
@@ -41,11 +41,11 @@ export default ({getSelectedFocus}: Props) => {
     const allFocus: any = useStaticQuery(focusQuery);
     const focuses: Options[][] = allFocus.allSanityFocus.edges.map(({node}: any) => ({label: node.focus, value: node.focus, id: node.id}));
 
-    const _handleFocus = (selections: ValueType<Options[]>) => getSelectedFocus(selections);
+    const handleFocus = (selections: ValueType<Options[]>) => getSelectedFocus(selections as Options[]);
 
     return (
         <Select
-            onChange={_handleFocus}
+            onChange={handleFocus}
             options={focuses}
             components={{ Control: ControlComponent }}
             theme={(theme) => ({

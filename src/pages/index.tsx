@@ -13,8 +13,8 @@ import {CompanyInfo} from './../components/results/CompanyCard';
 import Background from '../components/Background';
 
 import * as _ from 'lodash';
-import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, search, MatchedSelection, getFocusHits, getRoleHits, getSkillsHits, sortByHits } from '../components/utilities';
-import { ValueType } from 'react-select/lib/types';
+import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, MatchedSelection, sortByHits, groupBy } from '../components/utilities';
+// import { ValueType } from 'react-select/lib/types';
 import Button from '@material-ui/core/Button';
 
 export const indexPageQuery = graphql`
@@ -49,6 +49,9 @@ export const indexPageQuery = graphql`
 `;
 
 const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: {
       light: '#005056',
@@ -77,13 +80,14 @@ export default function IndexPage() {
 
     // const [matchedComps, setMatchedComps] = React.useState<CompanyData[]>([]);
     const matchedComps: CompanyData[] = [];
-    const [focusHits, setFocusHits] = React.useState<Array<MatchedSelection<FocusProps>> | undefined>(undefined);
-    const [rolesHits, setRolesHits] = React.useState<Array<MatchedSelection<RolesProps>> | undefined>(undefined);
-    const [skillsHits, setSkillsHits] = React.useState<Array<MatchedSelection<SkillsProps>> | undefined>(undefined);
-
+    const [focusHits, setFocusHits] = React.useState<Array<MatchedSelection<FocusProps>>>([]);
+    const [rolesHits, setRolesHits] = React.useState<Array<MatchedSelection<RolesProps>>>([]);
+    const [skillsHits, setSkillsHits] = React.useState<Array<MatchedSelection<SkillsProps>>>([]);
 
     const companyInfo: any = useStaticQuery(indexPageQuery);
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
+    const compNames = groupBy(companies, 'node.companyName');
+    console.log(compNames);
 
     const allCompanyFocuses = companies.map((company: CompanyData) => {
       return {id: company.node.id, focus: company.node.focus};
@@ -114,7 +118,8 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      setFocusHits(sortByHits<FocusProps>( matchedFocuses));
+      // setFocusHits(sortByHits<FocusProps>(matchedFocuses));
+      setFocusHits(matchedFocuses);
     };
 
     const getSelectedRoles = (selectedRoles: Options[]) => {
@@ -126,7 +131,9 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      setRolesHits(sortByHits<RolesProps>(matchedRoles));
+
+      // setRolesHits(sortByHits<RolesProps>(matchedRoles));
+      setRolesHits(matchedRoles);
     };
 
     const getSelectedSkills = (selectedSkills: Options[]) => {
@@ -138,21 +145,47 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-      setSkillsHits(sortByHits<SkillsProps>(matchedSkills));
+      // setSkillsHits(sortByHits<SkillsProps>(matchedSkills));
+      setSkillsHits(matchedSkills);
     };
 
     const handleSearch = () => {
 
-      const test = [...focusHits, ...rolesHits, ...skillsHits];
-      const sorted = test.sort((a, b) => (a.hits < b.hits ? 1 : -1));
+      const searchData = [...focusHits, ...rolesHits, ...skillsHits];
 
-      sorted.forEach((result) => {
-        if (result.matches.length === 0) {
-          _.pull(sorted, result);
+      focusHits && focusHits.forEach((result) => {
+        if (result.matches && result.matches.length === 0) {
+          _.pull(searchData, result);
         }
       });
 
-      console.log('sorted: ', sorted);
+      rolesHits && rolesHits.forEach((result) => {
+        if (result.matches && result.matches.length === 0) {
+          _.pull(searchData, result);
+        }
+      });
+
+      skillsHits && skillsHits.forEach((result) => {
+        if (result.matches && result.matches.length === 0) {
+          _.pull(searchData, result);
+        }
+      });
+
+      const grouped = groupBy(searchData, 'companyId');
+      const iterator = Object.keys(grouped);
+
+        companies.forEach((comp) => {
+          iterator.forEach((id) => {
+            if (id === comp.node.id) {
+              
+              console.log({id});
+            }
+          })
+        })
+       
+      console.log({iterator});
+
+      // console.log('grouped: ', grouped);
     };
 
     return (

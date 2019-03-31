@@ -41,8 +41,6 @@ body {
   display: grid;
   height: 100vh;
   margin: 0;
-  grid-area: container;
-
 
   grid-template-columns: 20% 1fr 15%;
   grid-template-rows: 1fr 60px;

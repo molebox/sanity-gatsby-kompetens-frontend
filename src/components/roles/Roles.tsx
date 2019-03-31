@@ -33,7 +33,7 @@ const ControlComponent  = (props: any) => (
   );
 
 interface Props {
-  getSelectedRoles: (selectedRoles: ValueType<Options[]>) => void;
+  getSelectedRoles: (selectedRoles: Options[]) => void;
 }
 
 export default ({getSelectedRoles}: Props) => {
@@ -41,11 +41,11 @@ export default ({getSelectedRoles}: Props) => {
     const allRoles: any = useStaticQuery(roleQuery);
     const roles: Options[][] = allRoles.allSanityRole.edges.map(({node}: any) => ({label: node.role, value: node.role, id: node.id}));
 
-    const _handleRoles = (selections: ValueType<Options[]>) => getSelectedRoles(selections);
+    const handleRoles = (selections: ValueType<Options[]>) => getSelectedRoles(selections as Options[]);
 
     return (
         <Select
-          onChange={_handleRoles}
+          onChange={handleRoles}
           options={roles}
           components={{ Control: ControlComponent }}
           theme={(theme) => ({

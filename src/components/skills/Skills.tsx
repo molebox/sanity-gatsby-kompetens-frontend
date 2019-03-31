@@ -33,7 +33,7 @@ const ControlComponent  = (props: any) => (
 );
 
 interface Props {
-  getSelectedSkills: (selectedSkills: ValueType<Options[]>) => void;
+  getSelectedSkills: (selectedSkills: Options[]) => void;
 }
 
 export default ({getSelectedSkills}: Props) => {
@@ -41,11 +41,11 @@ export default ({getSelectedSkills}: Props) => {
     const allSkills: any = useStaticQuery(skillQuery);
     const skills: Options[][] = allSkills.allSanitySkill.edges.map(({node}: any) => ({label: node.skillName, value: node.skillName, id: node.id}));
 
-    const _handleSkills = (selections: ValueType<Options[]>) => getSelectedSkills(selections);
+    const handleSkills = (selections: ValueType<Options[]>) => getSelectedSkills(selections as Options[]);
 
     return (
         <Select
-            onChange={_handleSkills}
+            onChange={handleSkills}
             options={skills}
             components={{ Control: ControlComponent }}
             theme={(theme) => ({

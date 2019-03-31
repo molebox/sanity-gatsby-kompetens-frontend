@@ -1,5 +1,8 @@
  import * as _ from 'lodash';
- 
+export interface GroupedMatches<T> {
+  [companyId: string]: Array<MatchedSelection<T>>;
+}
+
  export interface Options {
     id: string;
     value: string;
@@ -135,6 +138,17 @@
   return selectionSkill;
 }
 
+export function groupBy(objectArray: any, property: any) {
+  return objectArray.reduce( (acc: any, obj: any) => {
+    const key = obj[property];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(obj);
+    return acc;
+  }, []);
+}
+
 //  export const getFocusHits = (selectedFocus?: Array<MatchedSelection<FocusProps>>) => selectedFocus ? selectedFocus.filter((focus) => focus.hits) : undefined;
 
 //  export const getSkillsHits = (selectedSkill?: Array<MatchedSelection<SkillsProps>>) => selectedSkill ? selectedSkill.filter((skill) => skill.hits) : undefined;
@@ -207,3 +221,4 @@
     //   });
     //   return total;
     // }, []);
+
