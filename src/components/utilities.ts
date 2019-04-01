@@ -77,6 +77,8 @@ export interface GroupedMatches<T> {
     hits: number;
   }
 
+ export type DataTypes = MatchedSelection<FocusProps> | MatchedSelection<RolesProps> | MatchedSelection<SkillsProps>;
+
   // tslint:disable-next-line: adjacent-overload-signatures
  export function getAllCompaniesFocuses(companyFocus: FocusProps[], selected: FocusProps[]) {
   return companyFocus.filter((compFocus) => {
@@ -138,7 +140,7 @@ export interface GroupedMatches<T> {
   return selectionSkill;
 }
 
-export function groupBy(objectArray: any, property: any) {
+ export function groupBy(objectArray: any, property: any) {
   return objectArray.reduce( (acc: any, obj: any) => {
     const key = obj[property];
     if (!acc[key]) {

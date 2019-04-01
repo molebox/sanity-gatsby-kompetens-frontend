@@ -13,9 +13,10 @@ import {CompanyInfo} from './../components/results/CompanyCard';
 import Background from '../components/Background';
 
 import * as _ from 'lodash';
-import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, MatchedSelection, sortByHits, groupBy } from '../components/utilities';
+import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, MatchedSelection, sortByHits, groupBy, DataTypes } from '../components/utilities';
 // import { ValueType } from 'react-select/lib/types';
 import Button from '@material-ui/core/Button';
+import { resultsAriaMessage } from 'react-select/lib/accessibility';
 
 export const indexPageQuery = graphql`
 {
@@ -86,8 +87,6 @@ export default function IndexPage() {
 
     const companyInfo: any = useStaticQuery(indexPageQuery);
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
-    const compNames = groupBy(companies, 'node.companyName');
-    console.log(compNames);
 
     const allCompanyFocuses = companies.map((company: CompanyData) => {
       return {id: company.node.id, focus: company.node.focus};
@@ -131,7 +130,6 @@ export default function IndexPage() {
       return {matches: found, companyId: comp.id, hits: found.length};
     });
 
-
       // setRolesHits(sortByHits<RolesProps>(matchedRoles));
       setRolesHits(matchedRoles);
     };
@@ -174,16 +172,46 @@ export default function IndexPage() {
       const grouped = groupBy(searchData, 'companyId');
       const iterator = Object.keys(grouped);
 
-        companies.forEach((comp) => {
-          iterator.forEach((id) => {
-            if (id === comp.node.id) {
-              
-              console.log({id});
-            }
-          })
-        })
-       
-      console.log({iterator});
+      // const test = searchData.reduce((accumalator: any, currentValue: any) => {
+      //   const currentCompId = currentValue.companyId;
+      //   const compCount = accumalator[currentCompId];
+
+      //   return {
+      //     ...accumalator,
+      //     [currentCompId]: compCount,
+      //   };
+      // }, {});
+
+      const test: any[] = [];
+
+      const result = new Map();
+
+      searchData.forEach((element: DataTypes) => {
+        if (result.get(element.companyId)) {
+          result.set(element.companyId, result.get(element.companyId) + element.matches);
+         } else {
+           result.set(element.companyId, element.matches);
+        }});
+
+      // const output = searchData.reduce((o: any, cur: DataTypes) => {
+      //   // tslint:disable-next-line:one-variable-per-declaration
+      //   const compId = cur.companyId;
+      //   const found: DataTypes = o.find((elem: DataTypes) => {
+      //         return elem.companyId === compId;
+      //     });
+      //   if (found) {
+      //     // found.matches += cur.matches;
+      //     // found.matches += [...cur.matches];
+      //     found.matches.concat(cur.matches);
+      //   } else {
+      //     o.push(cur);
+      //     }
+      //   return o;
+      //     }, []);
+
+      // console.log({output});
+
+      console.log('TEST: ', result);
 
       // console.log('grouped: ', grouped);
     };
