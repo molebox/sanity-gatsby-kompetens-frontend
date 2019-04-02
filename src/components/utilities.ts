@@ -74,6 +74,8 @@ export interface GroupedMatches<T> {
     company: CompanyData;
   }
 
+ export type Matches = FocusProps[] | RolesProps[] | SkillsProps[];
+
  export type DataTypes = MatchedSelection<FocusProps> | MatchedSelection<RolesProps> | MatchedSelection<SkillsProps>;
 
   // tslint:disable-next-line: adjacent-overload-signatures

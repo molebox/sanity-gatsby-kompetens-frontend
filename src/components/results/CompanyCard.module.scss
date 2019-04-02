@@ -1,4 +1,26 @@
+.container {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+    "mainInfo"
+    "biography"
+}
 
+.infoAndMatches {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+    "mainInfo matches";
+    grid-area: mainInfo;
+}
+
+.biography {
+    grid-area: biography;
+}
+
+.matches {
+    grid-area: matches;
+}
 
 // company card
 .card {
