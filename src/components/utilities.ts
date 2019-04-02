@@ -59,22 +59,19 @@ export interface GroupedMatches<T> {
  }
 
  export interface FocusProps extends Base {
-    id: string;
     focus: string;
   }
  export interface RolesProps extends Base {
-    id: string;
     role: string;
   }
  export interface SkillsProps extends Base {
-    id: string;
     skillName: string;
   }
 
  export interface MatchedSelection<T> {
     matches: T[];
-    companyId: string;
-    hits: number;
+    // companyId: string;
+    company: CompanyData;
   }
 
  export type DataTypes = MatchedSelection<FocusProps> | MatchedSelection<RolesProps> | MatchedSelection<SkillsProps>;
@@ -166,19 +163,8 @@ export interface GroupedMatches<T> {
   });
 }
 
- export function sortByHits<T>(selected?: Array<MatchedSelection<T>>) {
-    return selected ? selected.sort((a, b) => (a.hits < b.hits ? 1 : -1)) : undefined;
- }
-
-//  export function getMatches<T extends Base>(companies: CompanyData[], selectedOptions: Options[]) {
-//   const allCompanyDetails = companies.map((company: CompanyData) => {
-//     return {id: company.node.id, roles: company.node.roles};
-//   });
-//   const selected = createRoleObject(selectedOptions);
-//   const matched: Array<MatchedSelection<T>> = allCompanyDetails.map((comp) => {
-//     const found = getAllCompaniesDetails<T>(comp.roles, selected);
-//     return {matches: found, companyId: comp.id, hits: found.length};
-//   });
+//  export function sortByHits<T>(selected?: Array<MatchedSelection<T>>) {
+//     return selected ? selected.sort((a, b) => (a.hits < b.hits ? 1 : -1)) : undefined;
 //  }
 
 

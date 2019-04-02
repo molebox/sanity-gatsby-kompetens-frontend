@@ -1,81 +1,40 @@
 import * as React from 'react';
-import {graphql, useStaticQuery} from 'gatsby';
+import {useSpring, animated} from 'react-spring';
+import { MatchedSelection, CompanyData } from '../utilities';
+import CompanyCard from './CompanyCard';
+import * as styles from '../../pages/Index.module.scss';
 
-interface Focus {
-    focus: string;
-}
-interface Roles {
-    role: string;
-}
-interface Skills {
-    skillName: string;
+interface Props {
+  matches: Array<MatchedSelection<any>>;
 }
 
-interface SearchProps {
-    selectedRoles: Roles[];
-    selectedFocuses: Focus[];
-    selectedSkills: Skills[];
-}
+export default function Search({matches}: Props) {
 
-interface CompanyInfoProps {
-      allSanityCompany: {
-        edges: {
-          node: {
-            id: string;
-            companyName: string,
-            contactPerson: string;
-            contactNumber: string;
-            email: string;
-            website: string;
-            recriutmentWebsite: string;
-            biography: string;
-            roles: {
-              id: string;
-              role: string;
-            }
-            skills: {
-              id: string;
-              skillName: string;
-            }
-          }
-        },
-      };
-  }
-
-export const companyQuery = graphql`
-{
-  allSanityCompany {
-    edges {
-      node {
-        id
-        companyName
-        contactPerson
-        contactNumber
-        email
-        website
-        recriutmentWebsite
-        biography
-        roles {
-          id
-          role
-        }
-        skills {
-          id
-          skillName
-        }
-      }
-    }
-  }
-}
-`;
-
-export default function Search() {
-
-    const companyInfo: CompanyInfoProps = useStaticQuery(companyQuery);
+  const animateIn = useSpring({
+    opacity: 1,
+    from: { opacity: 0 },
+    delay: 1000,
+    duration: 2000
+    });
 
   return (
-    <div>
-      Hi
-    </div>
+    <animated.div style={animateIn} className={[styles.results, styles.resultsContainer].join(' ')}>
+    {matches.map((match: MatchedSelection<any>) => {
+        return (
+          <animated.div style={animateIn} key={match.company.node.id}>
+            <CompanyCard
+              id={match.company.node.id}
+              companyName={match.company.node.companyName}
+              contactPerson={match.company.node.contactPerson}
+              email={match.company.node.email}
+              contactNumber={match.company.node.contactNumber}
+              website={match.company.node.website}
+              recruitmentWebsite={match.company.node.recruitmentWebsite}
+              biography={match.company.node.biography}
+            />
+          </animated.div >
+        );
+      })}
+</animated.div>
   )
 }

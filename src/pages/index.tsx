@@ -7,16 +7,11 @@ import Roles from '../components/roles/Roles';
 import Industry from '../components/industry/Industry';
 import Focus from '../components/focus/Focus';
 import PlaceHolder from '../components/results/Placeholder';
-import CompanyCard from '../components/results/CompanyCard';
-import {useSpring, animated} from 'react-spring';
-import {CompanyInfo} from './../components/results/CompanyCard';
-import Background from '../components/Background';
 
 import * as _ from 'lodash';
-import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, MatchedSelection, sortByHits, groupBy, DataTypes } from '../components/utilities';
-// import { ValueType } from 'react-select/lib/types';
+import { createSkillObject, Options, CompanyData, FocusProps, SkillsProps, RolesProps, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, MatchedSelection, groupBy, DataTypes } from '../components/utilities';
 import Button from '@material-ui/core/Button';
-import { resultsAriaMessage } from 'react-select/lib/accessibility';
+import Search from '../components/results/Search';
 
 export const indexPageQuery = graphql`
 {
@@ -69,18 +64,9 @@ const theme = createMuiTheme({
   }
 });
 
-const findCompanyFocusById = (companies: CompanyData[], id: string) => companies.find((company: CompanyData) => company.node.focus.some((focus) => focus.id === id));
-
-function findFocus(companies: CompanyData[], focusId: string) {
-  return companies.find(({node}: CompanyData) =>
-  node.focus.some((focus) => focus.id === focusId)
-  );
-}
-
 export default function IndexPage() {
 
-    // const [matchedComps, setMatchedComps] = React.useState<CompanyData[]>([]);
-    const matchedComps: CompanyData[] = [];
+    const [matchedComps, setMatchedComps] = React.useState<Array<MatchedSelection<any>>>([]);
     const [focusHits, setFocusHits] = React.useState<Array<MatchedSelection<FocusProps>>>([]);
     const [rolesHits, setRolesHits] = React.useState<Array<MatchedSelection<RolesProps>>>([]);
     const [skillsHits, setSkillsHits] = React.useState<Array<MatchedSelection<SkillsProps>>>([]);
@@ -89,61 +75,50 @@ export default function IndexPage() {
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
 
     const allCompanyFocuses = companies.map((company: CompanyData) => {
-      return {id: company.node.id, focus: company.node.focus};
+      return {id: company.node.id, focus: company.node.focus, company};
     });
 
     const allCompanySkills = companies.map((company: CompanyData) => {
-      return {id: company.node.id, skills: company.node.skills};
+      return {id: company.node.id, skills: company.node.skills, company};
     });
 
     const allCompanyRoles = companies.map((company: CompanyData) => {
-      return {id: company.node.id, roles: company.node.roles};
+      return {id: company.node.id, roles: company.node.roles, company};
     });
 
-    // const {name} = props.data.site.siteMetadata;
-    const animateIn = useSpring({
-      opacity: 1,
-      from: { opacity: 0 },
-      delay: 1000,
-      duration: 2000
-      });
-
     const getSelectedFocus = (selectedFocus: Options[]) => {
-      console.log('THE SELECTED FOCUS: ', selectedFocus);
+      setFocusHits([]);
 
       const selected = createFocusObject(selectedFocus);
       const matchedFocuses: Array<MatchedSelection<FocusProps>> = allCompanyFocuses.map((comp) => {
       const found = getAllCompaniesFocuses(comp.focus, selected);
-      return {matches: found, companyId: comp.id, hits: found.length};
+      return {matches: found, company: comp.company};
     });
 
-      // setFocusHits(sortByHits<FocusProps>(matchedFocuses));
       setFocusHits(matchedFocuses);
     };
 
     const getSelectedRoles = (selectedRoles: Options[]) => {
-      console.log('THE SELECTED ROLES: ', selectedRoles);
+      setRolesHits([]);
 
       const selected = createRoleObject(selectedRoles);
       const matchedRoles: Array<MatchedSelection<RolesProps>> = allCompanyRoles.map((comp) => {
       const found = getAllCompaniesRoles(comp.roles, selected);
-      return {matches: found, companyId: comp.id, hits: found.length};
+      return {matches: found, company: comp.company};
     });
 
-      // setRolesHits(sortByHits<RolesProps>(matchedRoles));
       setRolesHits(matchedRoles);
     };
 
     const getSelectedSkills = (selectedSkills: Options[]) => {
-      console.log('THE SELECTED SKILLS: ', selectedSkills);
+      setSkillsHits([]);
 
       const selected = createSkillObject(selectedSkills);
       const matchedSkills = allCompanySkills.map((comp) => {
       const found = getAllCompaniesSkills(comp.skills, selected);
-      return {matches: found, companyId: comp.id, hits: found.length};
+      return {matches: found, company: comp.company};
     });
 
-      // setSkillsHits(sortByHits<SkillsProps>(matchedSkills));
       setSkillsHits(matchedSkills);
     };
 
@@ -169,60 +144,31 @@ export default function IndexPage() {
         }
       });
 
-      const grouped = groupBy(searchData, 'companyId');
-      const iterator = Object.keys(grouped);
+      const sortedMatches = searchData.reduce((accumulator: any[], currentValue: DataTypes) => {
+        // tslint:disable-next-line:one-variable-per-declaration
+        const compId = currentValue.company.node.id;
+        const found: any | undefined = accumulator.find((elem: DataTypes) => {
+              return elem.company.node.id === compId;
+          });
+        if (found && found.matches) {
+          found.matches = [...found.matches, ...currentValue.matches];
+        } else {
+          accumulator.push(currentValue);
+          }
+        return accumulator;
+          }, []);
 
-      // const test = searchData.reduce((accumalator: any, currentValue: any) => {
-      //   const currentCompId = currentValue.companyId;
-      //   const compCount = accumalator[currentCompId];
+      sortedMatches.forEach((match: any) => {
+        match.matches = _.uniq(match.matches);
+      });
 
-      //   return {
-      //     ...accumalator,
-      //     [currentCompId]: compCount,
-      //   };
-      // }, {});
+      setMatchedComps(sortedMatches);
+      console.log({sortedMatches});
 
-      const test: any[] = [];
-
-      const result = new Map();
-
-      searchData.forEach((element: DataTypes) => {
-        if (result.get(element.companyId)) {
-          result.set(element.companyId, result.get(element.companyId) + element.matches);
-         } else {
-           result.set(element.companyId, element.matches);
-        }});
-
-      // const output = searchData.reduce((o: any, cur: DataTypes) => {
-      //   // tslint:disable-next-line:one-variable-per-declaration
-      //   const compId = cur.companyId;
-      //   const found: DataTypes = o.find((elem: DataTypes) => {
-      //         return elem.companyId === compId;
-      //     });
-      //   if (found) {
-      //     // found.matches += cur.matches;
-      //     // found.matches += [...cur.matches];
-      //     found.matches.concat(cur.matches);
-      //   } else {
-      //     o.push(cur);
-      //     }
-      //   return o;
-      //     }, []);
-
-      // console.log({output});
-
-      console.log('TEST: ', result);
-
-      // console.log('grouped: ', grouped);
     };
 
     return (
       <MuiThemeProvider theme={theme}>
-          {/* <div className={styles.showcase}>
-          <Background>
-            <h1>TEST</h1>
-          </Background>
-          </div> */}
             <div className={styles.container}>
               <div className={styles.header}>
                 <h1>A title could go here...</h1>
@@ -236,33 +182,15 @@ export default function IndexPage() {
                   <Focus getSelectedFocus={getSelectedFocus} />
                   <Roles getSelectedRoles={getSelectedRoles} />
                   <Skills getSelectedSkills={getSelectedSkills} />
-                  <Button variant="contained" onClick={handleSearch}>Search</Button>
+                  <Button variant="contained" onClick={handleSearch}>Search Test</Button>
                 </div>
-                {matchedComps.length ? (
-                  <animated.div style={animateIn} className={[styles.results, styles.resultsContainer].join(' ')}>
-                    {matchedComps.map(({node}: CompanyData) => {
-                        return (
-                          <animated.div style={animateIn} key={node.id}>
-                            <CompanyCard
-                              id={node.id}
-                              companyName={node.companyName}
-                              contactPerson={node.contactPerson}
-                              email={node.email}
-                              contactNumber={node.contactNumber}
-                              website={node.website}
-                              recruitmentWebsite={node.recruitmentWebsite}
-                              biography={node.biography}
-                            />
-                          </animated.div >
-                        );
-                      })}
-                </animated.div>
+                {matchedComps.length > 0 ? (
+                  <Search matches={matchedComps}/>
                 ) : (
                   <div className={styles.results}>
                     <PlaceHolder />
                   </div>
                 )}
-
                 <div className={styles.footer}/>
               </div>
             </div>
