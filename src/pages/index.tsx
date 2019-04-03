@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { Link } from "gatsby"
 import * as styles from './Index.module.scss';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Search from './Search';
 import Intro from './Intro';
+import { Button } from '@material-ui/core';
 
 const theme = createMuiTheme({
   typography: {
@@ -37,11 +39,12 @@ export default function IndexPage() {
             I många fall avgör kompetensförsörjning förutsättningar för tillväxt, i andra fall är kompetensförsörjning avgörande för verksamheters vidare existens. 
             Örnsköldsviks kommun står inför samma utmaningar som övriga kommuner, utmaningar om att hitta rätt kompetenser för att kommunen ska fortsätta utvecklas.
             </h3>
+            <Button variant="contained" color="primary"><a href="#search">Search Now</a></Button>
           </div>
           <div className={styles.intro}>
             <Intro />
           </div>
-          <div className={styles.search}>
+          <div id="search" className={styles.search}>
             <Search />
           </div>
           <div className={styles.footer}/>

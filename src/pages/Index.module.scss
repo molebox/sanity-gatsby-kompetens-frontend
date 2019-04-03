@@ -8,6 +8,7 @@ $basic-grey: '#ccc';
 *::before { 
   -webkit-box-sizing: inherit;
   box-sizing: inherit;
+  scroll-behavior: smooth;
   }
 
 body {
