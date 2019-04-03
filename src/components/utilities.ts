@@ -1,7 +1,4 @@
  import * as _ from 'lodash';
-export interface GroupedMatches<T> {
-  [companyId: string]: Array<MatchedSelection<T>>;
-}
 
  export interface Options {
     id: string;
@@ -9,34 +6,34 @@ export interface GroupedMatches<T> {
     label: string;
   }
 
- export interface CompanyInfoProps {
-    allSanityCompany: {
-      edges: {
-        node: {
-          id: string;
-          companyName: string,
-          contactPerson: string;
-          contactNumber: string;
-          email: string;
-          website: string;
-          recriutmentWebsite: string;
-          biography: string;
-          focus: {
-            id: string;
-            focus: string;
-          }
-          roles: {
-            id: string;
-            role: string;
-          }
-          skills: {
-            id: string;
-            skillName: string;
-          }
-        }
-      };
-    };
-}
+//  export interface CompanyInfoProps {
+//     allSanityCompany: {
+//       edges: {
+//         node: {
+//           id: string;
+//           companyName: string,
+//           contactPerson: string;
+//           contactNumber: string;
+//           email: string;
+//           website: string;
+//           recriutmentWebsite: string;
+//           biography: string;
+//           focus: {
+//             id: string;
+//             focus: string;
+//           }
+//           roles: {
+//             id: string;
+//             role: string;
+//           }
+//           skills: {
+//             id: string;
+//             skillName: string;
+//           }
+//         }
+//       };
+//     };
+// }
 
  export interface CompanyData {
     node: {
@@ -48,25 +45,26 @@ export interface GroupedMatches<T> {
       website: string;
       recruitmentWebsite: string;
       biography: string;
-      focus: FocusProps[];
-      roles: RolesProps[];
-      skills: SkillsProps[];
+      focus: Data[];
+      roles: Data[];
+      skills: Data[];
     };
   }
 
- interface Base {
+ export interface Data {
    id: string;
+   name: string;
  }
 
- export interface FocusProps extends Base {
-    focus: string;
-  }
- export interface RolesProps extends Base {
-    role: string;
-  }
- export interface SkillsProps extends Base {
-    skillName: string;
-  }
+//  export interface FocusProps extends Base {
+//     focus: string;
+//   }
+//  export interface RolesProps extends Base {
+//     role: string;
+//   }
+//  export interface SkillsProps extends Base {
+//     skillName: string;
+//   }
 
  export interface MatchedSelection<T> {
     matches: T[];
@@ -74,12 +72,12 @@ export interface GroupedMatches<T> {
     company: CompanyData;
   }
 
- export type Matches = FocusProps[] | RolesProps[] | SkillsProps[];
+//  export type Matches = FocusProps[] | RolesProps[] | SkillsProps[];
 
- export type DataTypes = MatchedSelection<FocusProps> | MatchedSelection<RolesProps> | MatchedSelection<SkillsProps>;
+// export type DataTypes = MatchedSelection<Data> | MatchedSelection<RolesProps> | MatchedSelection<SkillsProps>;
 
   // tslint:disable-next-line: adjacent-overload-signatures
- export function getAllCompaniesFocuses(companyFocus: FocusProps[], selected: FocusProps[]) {
+ export function getAllCompaniesFocuses(companyFocus: Data[], selected: Data[]) {
   return companyFocus.filter((compFocus) => {
     return selected.find((selectedFocus) => {
       return compFocus.id === selectedFocus.id;
@@ -87,7 +85,7 @@ export interface GroupedMatches<T> {
   });
 }
 // tslint:disable-next-line: adjacent-overload-signatures
- export function getAllCompaniesSkills(companySkill: SkillsProps[], selected: SkillsProps[]) {
+ export function getAllCompaniesSkills(companySkill: Data[], selected: Data[]) {
   return companySkill.filter((compSkill) => {
     return selected.find((selectedSkill) => {
       return compSkill.id === selectedSkill.id;
@@ -95,7 +93,7 @@ export interface GroupedMatches<T> {
   });
 }
 // tslint:disable-next-line: adjacent-overload-signatures
- export function getAllCompaniesRoles(companyRole: RolesProps[], selected: RolesProps[]) {
+ export function getAllCompaniesRoles(companyRole: Data[], selected: Data[]) {
   return companyRole.filter((compRole) => {
     return selected.find((selectedRole) => {
       return compRole.id === selectedRole.id;
@@ -104,11 +102,11 @@ export interface GroupedMatches<T> {
 }
 
  export function createFocusObject(selectedFocus: Options[]) {
-  const selectionFocus: FocusProps[] = [];
+  const selectionFocus: Data[] = [];
   selectedFocus.forEach(({ id, value }: Options) => {
     const focus = {
       id,
-      focus: value
+      name: value
     };
     selectionFocus.push(focus);
   });
@@ -116,11 +114,11 @@ export interface GroupedMatches<T> {
 }
 
  export function createRoleObject(selectedRole: Options[]) {
-  const selectionRole: RolesProps[] = [];
+  const selectionRole: Data[] = [];
   selectedRole.forEach(({ id, value }: Options) => {
     const role = {
       id,
-      role: value
+      name: value
     };
     selectionRole.push(role);
   });
@@ -128,27 +126,27 @@ export interface GroupedMatches<T> {
 }
 
  export function createSkillObject(selectedSkill: Options[]) {
-  const selectionSkill: SkillsProps[] = [];
+  const selectionSkill: Data[] = [];
   selectedSkill.forEach(({ id, value }: Options) => {
     const skill = {
       id,
-      skillName: value
+      name: value
     };
     selectionSkill.push(skill);
   });
   return selectionSkill;
 }
 
- export function groupBy(objectArray: any, property: any) {
-  return objectArray.reduce( (acc: any, obj: any) => {
-    const key = obj[property];
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(obj);
-    return acc;
-  }, []);
-}
+//  export function groupBy(objectArray: any, property: any) {
+//   return objectArray.reduce( (acc: any, obj: any) => {
+//     const key = obj[property];
+//     if (!acc[key]) {
+//       acc[key] = [];
+//     }
+//     acc[key].push(obj);
+//     return acc;
+//   }, []);
+// }
 
 //  export const getFocusHits = (selectedFocus?: Array<MatchedSelection<FocusProps>>) => selectedFocus ? selectedFocus.filter((focus) => focus.hits) : undefined;
 
@@ -157,7 +155,7 @@ export interface GroupedMatches<T> {
 //  export const getRoleHits = (selectedRole?: Array<MatchedSelection<RolesProps>>) => selectedRole ? selectedRole.filter((role) => role.hits) : undefined;
 
 // tslint:disable-next-line: adjacent-overload-signatures
- export function getAllCompaniesDetails<T extends Base>(companyDetail: T[], selected: T[]) {
+ export function getAllCompaniesDetails<T extends Data>(companyDetail: T[], selected: T[]) {
   return companyDetail.filter((comp) => {
     return selected.find((selectedOption) => {
       return comp.id === selectedOption.id;
@@ -168,7 +166,6 @@ export interface GroupedMatches<T> {
 //  export function sortByHits<T>(selected?: Array<MatchedSelection<T>>) {
 //     return selected ? selected.sort((a, b) => (a.hits < b.hits ? 1 : -1)) : undefined;
 //  }
-
 
 // function getRoles(companies: CompanyData[], roleId: string) {
 //   const company = findCompanyById(companies, roleId);
@@ -211,4 +208,3 @@ export interface GroupedMatches<T> {
     //   });
     //   return total;
     // }, []);
-

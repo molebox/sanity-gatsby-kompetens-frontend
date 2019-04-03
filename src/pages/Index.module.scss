@@ -14,143 +14,54 @@ body {
   -webkit-box-sizing: border-box;
   box-sizing: border-box; 
   margin: 0;
+  padding: 0;
   font-family: 'Montserrat', sans-serif;
   // overflow-x: hidden;
 
   background-color: #ccc;
+  border: 20px solid #4C3735;
 }
 
-// .outerContainer {
-//   display: grid;
-//   grid-template-rows: repeat(2, 1fr);
-
-//   grid-template-areas: 
-//   "showcase"
-//   "container";
-// }
-
-// .showcase {
-//   display: flex;
-//   flex: 1;
-//   height: 100%;
-//   width: 100%;
-//   grid-area: showcase;
-// }
-
+// MAIN SITE LAYOUT
 .container {
   display: grid;
-  height: 100vh;
-  margin: 0;
-
-  grid-template-columns: 20% 1fr 15%;
-  grid-template-rows: 1fr 60px;
-
-  grid-template-areas: 
-  "header header header"
-  "main main main"
-  "main main main"
-  "footer footer footer";
-
+  grid-template-rows: 50px 1.5fr 2fr 50px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+  "header header header header"
+  "welcomeText welcomeText intro ."
+  "search search search search"
+  "footer footer footer footer";
 }
 
-// Main layout header
 .header {
-    grid-area: header;
-    background-color: #ccc;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-
-    h1 {
-      color: $primary-colour;
-      margin-Left: 20px;
-      font-size: 2em;
-      font-weight: 600;
-    }
-}
-// Main layout, main content area - rest of the page
-.main {
-    grid-area: main;
-    display: grid;
-    grid-gap: 15px;
-    padding: 1em;
-    background-color: #ccc;
-
-    grid-template-columns: 1fr 3fr 4fr 1fr 1fr;
-    grid-template-rows: 1fr 6fr .5fr;
-
-    grid-template-areas: 
-    ". industry results results . ."
-    ". selections results results . ."
-    ". selections results results . .";
-
+  grid-area: header;
+  background-color: #4C3735;
 }
 
-// Within the main-area - industry selection
-.industry {
-    grid-area: industry;
+.welcomeText {
+  grid-area: welcomeText;
+  padding: 5em;
 }
 
-// Within the main-area - focus, roles and skills selections
-.selections {
-    grid-area: selections;
+.intro {
+  grid-area: intro;
+
+  // background-color: blue;
 }
 
-// Within the main-area - where the results are shown
-.results {
-    grid-area: results;
+.search {
+  grid-area: search;
 }
 
 .footer {
   grid-area: footer;
-  background-color: $basic-grey;
-  height: 50px;
+  background-color: #4C3735;
 }
 
-// component styles
+// MAIN SITE LAYOUT END
 
-.selectionContainer {
-  width: 100%;
-  display: flex;
-  flex-grow: 1;
-  flex-flow: column;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-  transition: box-shadow 0.5s;
-  will-change: transform;
-  border: 15px solid white;
-}
-
-.resultsContainer {
-  width: 100%;
-  height: 100%;
-  background: #ccc;
-  // border-radius: 20px;
-  // box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-  // transition: box-shadow 0.5s;
-  // will-change: transform;
-  // border: 15px solid #ccc;
-  // overflow: scroll;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.card {
-  width: 100%;
-  height: 100%;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-  transition: box-shadow 0.5s;
-  will-change: transform;
-  border: 15px solid white;
-}
-
-// .card:hover {
-//   box-shadow: 0px 30px 100px -10px rgba(0, 0, 0, 0.4);
-// }
-
+// SCROLLBAR
 .scrollbar
 {
 	margin-left: 30px;

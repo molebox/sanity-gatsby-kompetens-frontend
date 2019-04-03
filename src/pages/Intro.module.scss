@@ -1,0 +1,25 @@
+.container {
+    grid-area: intro;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3em;
+
+    .hireImage {
+        height: 700px;
+        width: 800px;
+        align-items: flex-end
+    }
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.5s;
+    will-change: transform;
+    border: 15px solid white;
+  }
+

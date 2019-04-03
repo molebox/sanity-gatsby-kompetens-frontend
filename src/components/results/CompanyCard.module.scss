@@ -6,20 +6,26 @@
     "biography"
 }
 
-.infoAndMatches {
+.mainInfo {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-areas:
-    "mainInfo matches";
+    grid-template-columns: 60% 40%;
     grid-area: mainInfo;
+
+    grid-template-areas:
+    "compInfo matches";
 }
 
-.biography {
-    grid-area: biography;
+.compInfo {
+    grid-area: compInfo;
 }
 
 .matches {
     grid-area: matches;
+
+}
+
+.biography {
+    grid-area: biography;
 }
 
 // company card

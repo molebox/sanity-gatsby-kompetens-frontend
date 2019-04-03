@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {useSpring, animated} from 'react-spring';
-import { MatchedSelection, CompanyData } from '../utilities';
+import {MatchedSelection, Data} from '../utilities';
 import CompanyCard from './CompanyCard';
-import * as styles from '../../pages/Index.module.scss';
+import * as styles from '../../pages/Search.module.scss';
 
 interface Props {
-  matches: Array<MatchedSelection<any>>;
+  matches: Array<MatchedSelection<Data>>;
 }
 
-export default function Search({matches}: Props) {
+export default function Results({matches}: Props) {
 
   const animateIn = useSpring({
     opacity: 1,
@@ -18,8 +18,8 @@ export default function Search({matches}: Props) {
     });
 
   return (
-    <animated.div style={animateIn} className={[styles.results, styles.resultsContainer].join(' ')}>
-    {matches.map((match: MatchedSelection<any>) => {
+    <animated.div style={animateIn} className={styles.results}>
+    {matches.map((match: MatchedSelection<Data>) => {
         return (
           <animated.div style={animateIn} key={match.company.node.id}>
             <CompanyCard
@@ -31,10 +31,11 @@ export default function Search({matches}: Props) {
               website={match.company.node.website}
               recruitmentWebsite={match.company.node.recruitmentWebsite}
               biography={match.company.node.biography}
+              matches={match.matches}
             />
           </animated.div >
         );
       })}
-</animated.div>
-  )
+    </animated.div>
+  );
 }
