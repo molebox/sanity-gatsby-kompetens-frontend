@@ -18,24 +18,26 @@ export default function Results({matches}: Props) {
     });
 
   return (
-    <animated.div style={animateIn} className={styles.results}>
-    {matches.map((match: MatchedSelection<Data>) => {
-        return (
-          <animated.div style={animateIn} key={match.company.node.id}>
-            <CompanyCard
-              id={match.company.node.id}
-              companyName={match.company.node.companyName}
-              contactPerson={match.company.node.contactPerson}
-              email={match.company.node.email}
-              contactNumber={match.company.node.contactNumber}
-              website={match.company.node.website}
-              recruitmentWebsite={match.company.node.recruitmentWebsite}
-              biography={match.company.node.biography}
-              matches={match.matches}
-            />
-          </animated.div >
-        );
-      })}
-    </animated.div>
+    <div className={[styles.results, styles.resultsContainer].join(' ')}>
+      <animated.div style={animateIn}>
+          {matches.map((match: MatchedSelection<Data>) => {
+              return (
+                <animated.div style={animateIn} key={match.company.node.id}>
+                  <CompanyCard
+                    id={match.company.node.id}
+                    companyName={match.company.node.companyName}
+                    contactPerson={match.company.node.contactPerson}
+                    email={match.company.node.email}
+                    contactNumber={match.company.node.contactNumber}
+                    website={match.company.node.website}
+                    recruitmentWebsite={match.company.node.recruitmentWebsite}
+                    biography={match.company.node.biography}
+                    matches={match.matches}
+                  />
+                </animated.div >
+              );
+            })}
+          </animated.div>
+    </div>
   );
 }

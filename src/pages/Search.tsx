@@ -163,7 +163,6 @@ export default function Search() {
       });
 
       setMatchedComps(sortedMatches);
-      console.log({sortedMatches});
 
     };
 

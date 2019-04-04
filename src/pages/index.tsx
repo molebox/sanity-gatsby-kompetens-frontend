@@ -33,13 +33,13 @@ export default function IndexPage() {
         <div className={styles.container}>
           <div className={styles.header}/>
           <div className={styles.welcomeText}>
-            <h1>Matcher dina kompetenser mot arbetsgivare i Örnsköldsvik</h1>
+            <h1>Matcha dina kompetenser mot arbetsgivare i Örnsköldsvik</h1>
             <h3>
             Vi ser kompetensförsörjning som en förutsättning för att bryta en negativ trend med flera tydliga bristbranscher på arbetsmarknaden, såväl lokalt som nationellt. 
             I många fall avgör kompetensförsörjning förutsättningar för tillväxt, i andra fall är kompetensförsörjning avgörande för verksamheters vidare existens. 
             Örnsköldsviks kommun står inför samma utmaningar som övriga kommuner, utmaningar om att hitta rätt kompetenser för att kommunen ska fortsätta utvecklas.
             </h3>
-            <Button variant="contained" color="primary"><a href="#search">Search Now</a></Button>
+            <a style={{textDecoration: 'none'}} href="#search"><Button variant="contained" color="primary">Search Now</Button></a>
           </div>
           <div className={styles.intro}>
             <Intro />
