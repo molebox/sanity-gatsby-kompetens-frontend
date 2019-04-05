@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as styles from './CompanyCard.module.scss';
 import {Data} from '../utilities';
+import { useSpring, animated } from 'react-spring';
 
 export interface CompanyInfo {
     id: string;
@@ -16,41 +17,30 @@ export interface CompanyInfo {
 
 export default function CompanyCard(props: CompanyInfo) {
 
-    console.log('matches: ', props.matches);
-
-    const matches = props.matches.map((match) => (
-        <div key={match.id}>
-            <h4>{match.name}</h4>
-        </div>
-    ));
-
+    const [flipped, setFlip] = React.useState(false);
+    const { transform, opacity } = useSpring({
+    opacity: flipped ? 1 : 0,
+    transform: `perspective(1000px) rotateX(${flipped ? 180 : 0}deg)`,
+    config: { mass: 10, tension: 500, friction: 80 }
+  });
     return (
-        <div key={props.id} className={styles.card}>
-            <div className={styles.container}>
-                <div className={styles.mainInfo}>
-                    <div className={styles.compInfo}>
-                        <h2>{props.companyName}</h2>
-                        <h4>{props.contactPerson}</h4>
-                        <h4>{props.contactNumber}</h4>
-                        <h4>{props.email}</h4>
-                        <h4>{props.website}</h4>
-                        <h4>{props.recruitmentWebsite}</h4>
-                    </div>
-                    <div className={styles.matches}>
-                        <h2>Matches</h2>
-                        {props.matches.map((match) => (
-                            <div key={match.id}>
-                                <h4>{match.name}</h4>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                <div className={styles.biography}>
-                    <p>{props.biography}</p>
-                </div>
-            </div>
-
-            {/* <div className={styles.fadeout}/> */}
+    <div className={styles.Card} onClick={() => setFlip((state) => !state)}>
+      <animated.div className={[styles.flip, styles.front].join(' ')} style={{opacity: opacity.interpolate((o: any) => 1 - o), transform}}>
+        <div className={styles.title}>
+            <h1>{props.companyName.toUpperCase()}</h1>
         </div>
-    );
+        <div className={styles.contactInfo}>
+            <h5>{props.contactPerson}</h5>
+            <h5>{props.contactNumber}</h5>
+            <h5>{props.email}</h5>
+            <h5>{props.website}</h5>
+            <h5>{props.recruitmentWebsite}</h5>
+        </div>
+        {/* <h5>VIEW MORE</h5> */}
+      </animated.div>
+      <animated.div className={[styles.flip, styles.back].join(' ')} style={{ opacity, transform: transform.interpolate((t) => `${t} rotateX(180deg)`) }}>
+        <h5>{props.biography}</h5>
+      </animated.div>
+    </div>
+  );
 }

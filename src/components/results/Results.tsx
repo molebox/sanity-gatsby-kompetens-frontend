@@ -19,7 +19,7 @@ export default function Results({matches}: Props) {
 
   return (
     <div className={[styles.results, styles.resultsContainer].join(' ')}>
-      <animated.div style={animateIn}>
+      <animated.div className={styles.cardWrapper} style={animateIn}>
           {matches.map((match: MatchedSelection<Data>) => {
               return (
                 <animated.div style={animateIn} key={match.company.node.id}>

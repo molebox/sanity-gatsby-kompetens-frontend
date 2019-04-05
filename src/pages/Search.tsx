@@ -9,7 +9,7 @@ import Focus from '../components/focus/Focus';
 import PlaceHolder from '../components/results/Placeholder';
 
 import * as _ from 'lodash';
-import { createSkillObject, Options, CompanyData, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, MatchedSelection, Data} from '../components/utilities';
+import { createSkillObject, Options, CompanyData, createFocusObject, getAllCompaniesFocuses, createRoleObject, getAllCompaniesRoles, getAllCompaniesSkills, MatchedSelection, Data, createObject, sortByMatches} from '../components/utilities';
 import Button from '@material-ui/core/Button';
 import Results from '../components/results/Results';
 
@@ -75,21 +75,24 @@ export default function Search() {
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
 
     const allCompanyFocuses = companies.map((company: CompanyData) => {
-      return {id: company.node.id, name: company.node.focus, company};
+      const focuses = createFocusObject(company.node.focus);
+      return {id: company.node.id, name: focuses, company};
     });
 
     const allCompanySkills = companies.map((company: CompanyData) => {
-      return {id: company.node.id, name: company.node.skills, company};
+      const skills = createSkillObject(company.node.skills);
+      return {id: company.node.id, name: skills, company};
     });
 
     const allCompanyRoles = companies.map((company: CompanyData) => {
-      return {id: company.node.id, name: company.node.roles, company};
+      const roles = createRoleObject(company.node.roles);
+      return {id: company.node.id, name: roles, company};
     });
 
     const getSelectedFocus = (selectedFocus: Options[]) => {
       setFocusHits([]);
 
-      const selected = createFocusObject(selectedFocus);
+      const selected = createObject(selectedFocus);
       const matchedFocuses: Array<MatchedSelection<Data>> = allCompanyFocuses.map((comp) => {
       const found = getAllCompaniesFocuses(comp.name, selected);
       return {matches: found, company: comp.company};
@@ -101,7 +104,7 @@ export default function Search() {
     const getSelectedRoles = (selectedRoles: Options[]) => {
       setRolesHits([]);
 
-      const selected = createRoleObject(selectedRoles);
+      const selected = createObject(selectedRoles);
       const matchedRoles: Array<MatchedSelection<Data>> = allCompanyRoles.map((comp) => {
       const found = getAllCompaniesRoles(comp.name, selected);
       return {matches: found, company: comp.company};
@@ -113,7 +116,7 @@ export default function Search() {
     const getSelectedSkills = (selectedSkills: Options[]) => {
       setSkillsHits([]);
 
-      const selected = createSkillObject(selectedSkills);
+      const selected = createObject(selectedSkills);
       const matchedSkills: Array<MatchedSelection<Data>> = allCompanySkills.map((comp) => {
       const found = getAllCompaniesSkills(comp.name, selected);
       return {matches: found, company: comp.company};
@@ -123,6 +126,7 @@ export default function Search() {
     };
 
     const handleSearch = () => {
+      setMatchedComps([]);
 
       const searchData = [...focusHits, ...rolesHits, ...skillsHits];
 
@@ -158,12 +162,13 @@ export default function Search() {
         return accumulator;
           }, []);
 
-      sortedMatches.forEach((match: MatchedSelection<Data>) => {
-        match.matches = _.uniq(match.matches);
-      });
+      const unique = sortedMatches.map((match: MatchedSelection<Data>) => ({
+        ...match,
+        ...match.matches,
+        matches: match.matches = _.uniqBy(match.matches, 'id')
+      }));
 
-      setMatchedComps(sortedMatches);
-
+      setMatchedComps(sortByMatches(unique));
     };
 
     return (

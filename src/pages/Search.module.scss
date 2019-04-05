@@ -99,10 +99,17 @@ $basic-grey: '#ccc';
     // transition: box-shadow 0.5s;
     // will-change: transform;
     // border: 15px solid #ccc;
+    margin-inline-start: 50px;
+    display: flex;
+    align-content: center;
     overflow: scroll;
     overflow-y: scroll;
     overflow-x: hidden;
   }
+
+  .cardWrapper {
+    margin: 1rem;
+}
   
   .card {
     width: 100%;
