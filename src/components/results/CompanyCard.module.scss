@@ -1,101 +1,69 @@
-.container {
-    display: grid;
-    // grid-template-rows: 1fr 1fr;
-    grid-template-areas: 
-    "mainInfo"
-    "biography"
+
+.title {
+  display: flex;
+  grid-area: title;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3em;
 }
 
-.mainInfo {
-    display: grid;
-    grid-template-columns: 60% 40%;
-    grid-area: mainInfo;
-
-    grid-template-areas:
-    "compInfo matches";
+.row {
+  display: flex;
 }
 
-.compInfo {
-    grid-area: compInfo;
-    padding: 0;
+/* Create two equal columns that sits next to each other */
+.column {
+  display: flex;
+  flex: 50%;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  align-self: center;
+  margin-block-start: 1rem;
+}
+
+.contactInfo {
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  align-self: center;
 }
 
 .matches {
-    grid-area: matches;
+  grid-area: matches;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
 
-    ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      li {
-        padding: 0px;
-      }
+.match {
+  font-weight: 400;
 }
 
 .biography {
     grid-area: biography;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: 200;
 }
 
-// company card
-.card {
-    position: relative;
-    max-width: 500px;
-    max-height: 500px;
-    width: 50ch;
-    // height: 20ch;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
-    // -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.54);
-    // -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.54);
-    // box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.54);
-    transition: box-shadow 0.5s;
-    will-change: transform, opacity;
-    border: 15px solid white;
-    background-attachment: scroll;
-    margin: 0 10px 20px 10px;
-  }
-  .card:hover {
-    box-shadow: 0px 10px 30px -10px rgba(0, 0, 0, 0.4);
-  }
-
-  .fadeout {
-    position: absolute; 
-    bottom: 0em;
-    width:100%;
-    height: 4em;
-    background: -webkit-linear-gradient(
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 1) 100%
-    ); 
-    background-image: -moz-linear-gradient(
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 1) 100%
-    );
-    background-image: -o-linear-gradient(
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 1) 100%
-    );
-    background-image: linear-gradient(
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 1) 100%
-    );
-    background-image: -ms-linear-gradient(
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 1) 100%
-    );
-  } 
-
+.divider {
+	background: black;
+	bottom: 0;
+	margin-left: -10px;
+	position: absolute;
+	top: 0;
+	width: 0.1rem;
+}
 
   // FLIP ANIMATION CARD
   .Card {
     height: 300px;
     width: 600px;
     position: relative;
-
-    // box-shadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
-    // transition: box-shadow 0.5s;
-    // will-change: transform, opacity;
     background-attachment: scroll;
     margin: 0 10px 20px 10px;
   }
@@ -108,8 +76,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    // align-items: center;
-    // justify-content: center;
     -webkit-box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
     box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
@@ -117,40 +83,23 @@
   
   .front {
     background: white;
+    border: 5px solid white;
     border-radius: 27px 7px 27px 7px;
     -moz-border-radius: 27px 7px 27px 7px;
     -webkit-border-radius: 27px 7px 27px 7px;
-
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas: 
-    "title"
-    "contactInfo";
-  }
-
-  .title {
-      display: flex;
-      grid-area: title;
-      align-self: center;
-      align-items: center;
-      justify-content: center;
-  }
-
-  .contactInfo {
-      grid-area: contactInfo;
-      display: flex;
-      justify-content: space-evenly;
-      flex-wrap: wrap;
-
-      h5 {
-          padding-inline-start: 1rem;
-      }
   }
 
   .back {
     background: white;
+    border: 5px solid white;
     border-radius: 7px 27px 7px 27px;
     -moz-border-radius: 7px 27px 7px 27px;
     -webkit-border-radius: 7px 27px 7px 27px;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "matches"
+    "biography";
   }
   

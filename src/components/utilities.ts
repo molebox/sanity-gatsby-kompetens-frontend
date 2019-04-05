@@ -43,7 +43,7 @@
       contactNumber: string;
       email: string;
       website: string;
-      recruitmentWebsite: string;
+      recriutmentWebsite: string;
       biography: string;
       focus: FocusProps[];
       roles: RolesProps[];

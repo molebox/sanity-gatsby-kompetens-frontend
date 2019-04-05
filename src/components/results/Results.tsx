@@ -30,7 +30,7 @@ export default function Results({matches}: Props) {
                     email={match.company.node.email}
                     contactNumber={match.company.node.contactNumber}
                     website={match.company.node.website}
-                    recruitmentWebsite={match.company.node.recruitmentWebsite}
+                    recruitmentWebsite={match.company.node.recriutmentWebsite}
                     biography={match.company.node.biography}
                     matches={match.matches}
                   />
