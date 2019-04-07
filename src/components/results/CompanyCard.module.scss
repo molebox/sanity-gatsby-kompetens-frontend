@@ -1,7 +1,39 @@
+.container {
+  display: grid;
+  grid-template-rows: 20px 1fr;
+  grid-template-areas:
+  "top"
+  "middle"
+  "bottom";
+  margin: 0 10px 20px 10px;
+}
+
+.top {
+  justify-content: flex-start;
+  grid-area: top;
+}
+
+.middle {
+  grid-area: middle;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: 0.7rem;
+}
+
+.bottom {
+  grid-area: bottom;
+
+  .biography {
+    grid-area: biography;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    font-weight: 200;
+  }
+}
 
 .title {
   display: flex;
-  grid-area: title;
   align-self: center;
   align-items: center;
   justify-content: center;
@@ -31,7 +63,6 @@
 }
 
 .matches {
-  grid-area: matches;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -42,13 +73,7 @@
   font-weight: 400;
 }
 
-.biography {
-    grid-area: biography;
-    align-self: center;
-    align-items: center;
-    justify-content: center;
-    font-weight: 200;
-}
+
 
 .divider {
 	background: black;
@@ -61,7 +86,7 @@
 
   // FLIP ANIMATION CARD
   .Card {
-    height: 300px;
+    height: auto;
     width: 600px;
     position: relative;
     background-attachment: scroll;
@@ -87,6 +112,9 @@
     border-radius: 27px 7px 27px 7px;
     -moz-border-radius: 27px 7px 27px 7px;
     -webkit-border-radius: 27px 7px 27px 7px;
+    -webkit-box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
+    box-shadow: 6px 6px 26px -6px rgba(0, 0, 0, 0.75);
   }
 
   .back {

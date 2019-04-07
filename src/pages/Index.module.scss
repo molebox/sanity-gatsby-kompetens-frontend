@@ -152,7 +152,7 @@ body {
   /* Styles */
     .container {
       display: grid;
-      grid-template-rows: 50px 1.5fr 2fr 50px;
+      grid-template-rows: 50px 2fr 2fr 50px;
       grid-template-columns: 1fr 1fr 1fr;
       grid-template-areas:
       "header header header"
@@ -168,7 +168,7 @@ body {
     /* Styles */
     .container {
       display: grid;
-      grid-template-rows: 50px 1.5fr 2fr 50px;
+      grid-template-rows: 50px 2fr 2fr 50px;
       grid-template-columns: 1fr 1fr 1fr 1fr;
       grid-template-areas:
       "header header header header"
@@ -183,7 +183,7 @@ body {
   /* Styles */
   .container {
     display: grid;
-    grid-template-rows: 50px 1.5fr 2fr 50px;
+    grid-template-rows: 50px 2fr 2fr 50px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-areas:
     "header header header header"
