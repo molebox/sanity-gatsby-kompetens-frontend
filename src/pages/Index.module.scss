@@ -24,16 +24,18 @@ body {
 }
 
 // MAIN SITE LAYOUT
-// .container {
-//   display: grid;
-//   grid-template-rows: 50px 1.5fr 2fr 50px;
-//   grid-template-columns: 1fr 1fr 1fr 1fr;
-//   grid-template-areas:
-//   "header header header header"
-//   "welcomeText welcomeText intro ."
-//   "search search search search"
-//   "footer footer footer footer";
-// }
+.container {
+  display: grid;
+  grid-template-rows: 50px 1.5fr 2fr 50px;
+  // grid-template-rows: repeat(auto-fit, minmax(50px, 2fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  // grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+  "header header header header"
+  "welcomeText welcomeText intro ."
+  "search search search search"
+  "footer footer footer footer";
+}
 
 .header {
   grid-area: header;
@@ -102,11 +104,29 @@ body {
   /* Smartphones (landscape) ----------- */
   @media only screen and (min-width : 321px) {
   /* Styles */
+
+    .container {
+      grid-template-areas:
+      "header"
+      "intro"
+      "welcomeText"
+      "search"
+      "footer";
+    }
   }
   
   /* Smartphones (portrait) ----------- */
   @media only screen and (max-width : 320px) {
   /* Styles */
+
+    .container {
+      grid-template-areas:
+      "header"
+      "intro"
+      "welcomeText"
+      "search"
+      "footer";
+    }
   }
 
 
@@ -131,9 +151,6 @@ body {
   /* Styles */
 
     .container {
-      display: grid;
-      grid-template-rows: 50px 1.5fr 2fr 50px;
-      grid-template-columns: 1fr 1fr;
       grid-template-areas:
       "header header"
       "welcomeText intro"
@@ -144,6 +161,15 @@ body {
   
   @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) and (-webkit-min-device-pixel-ratio : 2) {
   /* Styles */
+
+    .container {
+      grid-template-areas:
+      "header"
+      "intro"
+      "welcomeText"
+      "search"
+      "footer";
+    }
   }
 
 
@@ -151,9 +177,6 @@ body {
   @media only screen  and (min-width : 1224px) {
   /* Styles */
     .container {
-      display: grid;
-      grid-template-rows: 50px 2fr 2fr 50px;
-      grid-template-columns: 1fr 1fr 1fr;
       grid-template-areas:
       "header header header"
       "welcomeText intro ."
@@ -167,30 +190,24 @@ body {
   @media only screen  and (min-width : 1575px) {
     /* Styles */
     .container {
-      display: grid;
-      grid-template-rows: 50px 2fr 2fr 50px;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
       grid-template-areas:
       "header header header header"
       "welcomeText welcomeText intro ."
       "search search search search"
       "footer footer footer footer";
     }
-    }
+  }
   
   /* Large screens ----------- */
   @media only screen  and (min-width : 1824px) {
   /* Styles */
-  .container {
-    display: grid;
-    grid-template-rows: 50px 2fr 2fr 50px;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-areas:
-    "header header header header"
-    "welcomeText welcomeText intro ."
-    "search search search search"
-    "footer footer footer footer";
-  }
+    .container {
+      grid-template-areas:
+      "header header header header"
+      "welcomeText welcomeText intro ."
+      "search search search search"
+      "footer footer footer footer";
+    }
   }
   
   /* iPhone 4 ----------- */

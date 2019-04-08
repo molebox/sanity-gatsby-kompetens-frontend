@@ -45,21 +45,20 @@ export default function CompanyCard(props: CompanyInfo) {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const filteredWebsite = props.website.replace('http://', '');
-    const filteredRecruitment = props.recruitmentWebsite.replace('http://', '');
-
-    const handleClick = (event: any) => {
+  const filteredWebsite = props.website.replace('http://', '');
+  const filteredRecruitment = props.recruitmentWebsite.replace('http://', '');
+  const handleClick = (event: any) => {
       setAnchorEl(event.currentTarget);
     };
-  
-    const handleClose = () => {
+
+  const handleClose = () => {
       setAnchorEl(null);
     };
 
-    const open = Boolean(anchorEl);
-    const ITEM_HEIGHT = 48;
+  const open = Boolean(anchorEl);
+  const ITEM_HEIGHT = 48;
 
-    return (
+  return (
     <div className={styles.Card}>
       <div className={[styles.front, styles.container].join(' ')}>
 
@@ -83,7 +82,7 @@ export default function CompanyCard(props: CompanyInfo) {
                 width: 250,
               },
             }}
-          > 
+          >
           <div style={{justifyContent: 'center', display: 'flex', outline: 'none'}}>
             <h6>MATCHES</h6>
           </div>
