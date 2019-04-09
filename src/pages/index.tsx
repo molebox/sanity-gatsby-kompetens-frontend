@@ -46,7 +46,9 @@ export default function IndexPage() {
           <div id="search" className={styles.search}>
             <Search />
           </div>
-          <div className={styles.footer}/>
+          <div className={styles.footer}>
+            <h5>Hungry Bear Studio &copy;</h5>
+          </div>
         </div>
       </MuiThemeProvider>
     );

@@ -20,7 +20,8 @@ body {
   // overflow-x: hidden;
 
   background-color: #ccc;
-  border: 20px solid #4C3735;
+  border-top: 20px solid #4C3735;
+  border-bottom: 20px solid #4C3735;
 }
 
 // MAIN SITE LAYOUT
@@ -60,6 +61,9 @@ body {
 .footer {
   grid-area: footer;
   background-color: #4C3735;
+  display: flex;
+  justify-content: center;
+  color: white;
 }
 
 // MAIN SITE LAYOUT END
