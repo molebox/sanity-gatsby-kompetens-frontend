@@ -70,6 +70,7 @@ export default function Search() {
     const [focusHits, setFocusHits] = React.useState<Array<MatchedSelection<Data>>>([]);
     const [rolesHits, setRolesHits] = React.useState<Array<MatchedSelection<Data>>>([]);
     const [skillsHits, setSkillsHits] = React.useState<Array<MatchedSelection<Data>>>([]);
+    const [loading, setLoading] = React.useState(false);
 
     const companyInfo: any = useStaticQuery(indexPageQuery);
     const companies: CompanyData[] = companyInfo.allSanityCompany.edges;
@@ -126,6 +127,7 @@ export default function Search() {
     };
 
     const handleSearch = () => {
+      setLoading(true);
       setMatchedComps([]);
 
       const searchData = [...focusHits, ...rolesHits, ...skillsHits];
@@ -169,6 +171,7 @@ export default function Search() {
       }));
 
       setMatchedComps(sortByMatches(unique));
+      setLoading(false);
     };
 
     return (

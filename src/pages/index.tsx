@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link } from "gatsby"
 import * as styles from './Index.module.scss';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Search from './Search';

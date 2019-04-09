@@ -41,6 +41,8 @@ $basic-grey: '#ccc';
       background-color: #ccc;
   
       grid-template-columns: 1fr 3fr 4fr 1fr 1fr;
+      // grid-template-columns: repeat(auto-fit, minmax(2fr, 3fr));
+      //grid-template-rows: repeat(auto-fit, minmax(2fr, 1fr));
       grid-template-rows: 1fr 6fr .5fr;
   
       grid-template-areas: 
@@ -65,6 +67,7 @@ $basic-grey: '#ccc';
     align-items: center;
     justify-content: center;
     padding-block-start: 2em;
+    margin-block-end: 2em;
   }
   
   // Within the main-area - where the results are shown
@@ -77,10 +80,6 @@ $basic-grey: '#ccc';
     grid-column: 2;
     grid-row-end: auto;
     width: 100%;
-    // height: 100%;
-    // display: flex;
-    // flex-grow: 1;
-    // flex-flow: column;
     background: white;
     border-radius: 20px;
     box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
@@ -91,16 +90,7 @@ $basic-grey: '#ccc';
   
   .resultsContainer {
     height: 60rem;
-    // width: 100%;
-    // height: 100%;
-    // height: 60%;
-    // background: #ccc;
-    // border-radius: 20px;
-    // box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
-    // transition: box-shadow 0.5s;
-    // will-change: transform;
-    // border: 15px solid #ccc;
-    margin-inline-start: 50px;
+    margin-inline-start: 1rem;
     display: flex;
     align-content: center;
     overflow: scroll;
@@ -138,6 +128,13 @@ $basic-grey: '#ccc';
       "main"
       "main";
     }
+
+    .main {
+      grid-template-areas: 
+      "industry"
+      "selections"
+      "results";
+    }
   }
     
     /* Smartphones (portrait) ----------- */
@@ -150,22 +147,68 @@ $basic-grey: '#ccc';
       "main"
       "main";
     }
+
+    .main {
+      grid-template-areas: 
+      "industry"
+      "selections"
+      "results";
     }
+  }
   
   
     
     /* iPads (portrait and landscape) ----------- */
     @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
     /* Styles */
+
+    .container {
+      grid-template-areas: 
+      "header header header"
+      "main main main"
+      "main main main";
+    }
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
+      }
     }
     
     /* iPads (landscape) ----------- */
     @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
     /* Styles */
+
+    .container {
+      grid-template-areas: 
+      "header header header"
+      "main main main"
+      "main main main";
+    }
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
+      }
     }
     /* iPads (portrait) ----------- */
     @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
     /* Styles */
+
+    .container {
+      grid-template-areas: 
+      "header header header"
+      "main main main"
+      "main main main";
+    }
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
+      }
     }
     /**********
     iPad 3
@@ -175,10 +218,16 @@ $basic-grey: '#ccc';
   
     .container {
       grid-template-areas: 
-      "header header"
-      "main main"
-      "main main";
+      "header header header"
+      "main main main"
+      "main main main";
     }
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
+      }
   }
     
     @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) and (-webkit-min-device-pixel-ratio : 2) {
@@ -186,10 +235,16 @@ $basic-grey: '#ccc';
   
     .container {
       grid-template-areas: 
-      "header"
-      "main"
-      "main";
+      "header header header"
+      "main main main"
+      "main main main";
     }
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
+      }
   }
   
   
@@ -202,8 +257,13 @@ $basic-grey: '#ccc';
       "main main main"
       "main main main";
     }
-    
-    }
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
+      }
+  }
   
     /* Meduim screens ------------*/
     @media only screen  and (min-width : 1575px) {
@@ -214,7 +274,14 @@ $basic-grey: '#ccc';
         "main main main"
         "main main main";
       }
-    }
+
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
+      }
+  }
     
     /* Large screens ----------- */
     @media only screen  and (min-width : 1824px) {
@@ -225,7 +292,13 @@ $basic-grey: '#ccc';
       "main main main"
       "main main main";
     }
+      .main {
+        grid-template-areas: 
+        ". industry results results . ."
+        ". selections results results . ."
+        ". . results results . .";
     }
+  }
     
     /* iPhone 4 ----------- */
     @media only screen and (min-device-width : 320px) and (max-device-width : 480px) and (orientation : landscape) and (-webkit-min-device-pixel-ratio : 2) {

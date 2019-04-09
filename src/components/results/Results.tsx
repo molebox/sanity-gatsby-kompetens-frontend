@@ -19,10 +19,10 @@ export default function Results({matches}: Props) {
 
   return (
     <div className={[styles.results, styles.resultsContainer].join(' ')}>
-      <animated.div className={styles.cardWrapper} style={animateIn}>
+      <div className={styles.cardWrapper} style={animateIn}>
           {matches.map((match: MatchedSelection<Data>) => {
               return (
-                <animated.div style={animateIn} key={match.company.node.id}>
+                <div style={animateIn} key={match.company.node.id}>
                   <CompanyCard
                     id={match.company.node.id}
                     companyName={match.company.node.companyName}
@@ -34,10 +34,10 @@ export default function Results({matches}: Props) {
                     biography={match.company.node.biography}
                     matches={match.matches}
                   />
-                </animated.div >
+                </div>
               );
             })}
-          </animated.div>
+          </div>
     </div>
   );
 }

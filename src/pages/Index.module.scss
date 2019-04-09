@@ -178,10 +178,10 @@ body {
   /* Styles */
     .container {
       grid-template-areas:
-      "header header header"
-      "welcomeText intro ."
-      "search search search"
-      "footer footer footer";
+      "header header header header"
+      "welcomeText welcomeText intro ."
+      "search search search search"
+      "footer footer footer footer";
     }
   
   }

@@ -47,6 +47,8 @@ export default function CompanyCard(props: CompanyInfo) {
 
   const filteredWebsite = props.website.replace('http://', '');
   const filteredRecruitment = props.recruitmentWebsite.replace('http://', '');
+  const emailLink = `mailto:${props.email}`;
+
   const handleClick = (event: any) => {
       setAnchorEl(event.currentTarget);
     };
@@ -106,9 +108,9 @@ export default function CompanyCard(props: CompanyInfo) {
                 <div className={styles.contactInfo}>
                   <h5>{props.contactPerson}</h5>
                   <h5>{props.contactNumber}</h5>
-                  <h5>{props.email}</h5>
-                  <h5>{filteredWebsite}</h5>
-                  <h5>{filteredRecruitment}</h5>
+                  <a style={{textDecoration: 'none', color: '#005056'}} href={emailLink}><h5>{props.email}</h5></a>
+                  <a style={{textDecoration: 'none', color: '#005056'}} href={props.website} target="_blank"><h5>{filteredWebsite}</h5></a>
+                  <a style={{textDecoration: 'none', color: '#005056'}} href={props.recruitmentWebsite} target="_blank"><h5>{filteredRecruitment}</h5></a>
                 </div>
               </div>
             </div>
