@@ -10,3 +10,6 @@
   Competence matching site. Select your skillsets and match them to the right company. Current version has one industry (IT) and is connected to a sanity.io CMS backend.
 </h4>
 
+<h4 align="center">
+  Live at <a href="https://kompetens.netlify.com">kompetens.netlify.com</a>
+</h4>
